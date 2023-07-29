@@ -1,5 +1,7 @@
+use crate::io::TempHandler;
+
 use super::audio::play_beep;
-use super::io::{FileHandler, SampleMessage};
+use super::io::{FileHandler, SampleMessage, SoundsList};
 
 #[tauri::command]
 pub fn greet(name: &str) -> String {
@@ -16,4 +18,9 @@ pub fn default_sound(msg: &str) {
 #[tauri::command]
 pub fn upload_sample(message: SampleMessage) {
     FileHandler::save_sample(message);
+}
+
+#[tauri::command]
+pub fn samples_list() -> SoundsList {
+    FileHandler::get_all_entries()
 }

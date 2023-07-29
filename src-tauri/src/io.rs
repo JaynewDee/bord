@@ -14,11 +14,17 @@ pub struct SampleMessage {
     path: String,
 }
 
-pub trait TempFileHandler {
+pub trait TempHandler {
+    const ROOT: PathBuf = std::env::temp_dir();
+
     fn destination(path: &str) -> PathBuf;
+    fn get_all_entries() -> SoundsList;
+    fn data_dir() -> PathBuf;
 }
 
-impl TempFileHandler for FileHandler {
+pub type SoundsList = Vec<String>;
+
+impl TempHandler for FileHandler {
     fn destination(path: &str) -> PathBuf {
         let path_buf = PathBuf::from(path);
 
@@ -26,13 +32,46 @@ impl TempFileHandler for FileHandler {
 
         let last = segments[segments.len() - 1];
 
-        let mut destination_path: PathBuf = std::env::temp_dir();
+        let mut destination_path: PathBuf = Self::ROOT;
 
         destination_path.push("bord_data");
 
         std::fs::create_dir_all(&destination_path).unwrap();
         destination_path.push(last);
         destination_path
+    }
+
+    fn data_dir() -> PathBuf {
+        let mut destination_path: PathBuf = Self::ROOT;
+
+        destination_path.push("bord_data");
+
+        destination_path
+    }
+
+    fn get_all_entries() -> SoundsList {
+        let path = Self::data_dir();
+
+        let entries = std::fs::read_dir(path).unwrap();
+
+        let mut full_list: Vec<String> = vec![];
+
+        for entry in entries {
+            let entry = entry.unwrap();
+            let path = entry.path();
+
+            // Check if the entry is a file.
+            if path.is_file() {
+                // Get the file name as a string.
+                if let Some(file_name) = path.file_name() {
+                    if let Some(file_name_str) = file_name.to_str() {
+                        full_list.push(file_name_str.to_owned());
+                    }
+                }
+            }
+        }
+
+        full_list
     }
 }
 
