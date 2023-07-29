@@ -3,14 +3,18 @@
     windows_subsystem = "windows"
 )]
 
-use ffi::{default_sound, greet};
+use ffi::{default_sound, greet, upload_sample};
 
 mod audio;
 mod ffi;
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, default_sound])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            default_sound,
+            upload_sample
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

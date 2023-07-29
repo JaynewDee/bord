@@ -1,21 +1,39 @@
+import { ChangeEvent, useEffect, useState } from "react";
+import { uploadSample } from "../ffi/invoke";
+import { UnlistenFn, emit, listen } from '@tauri-apps/api/event';
 
-export function UploadSampleForm() {
+export type AudioFileUploadMessage = {
+    id: number,
+    path: string,
+}
 
-    const handleFileUpload = (e: any) => {
-        const fileHandle = e.target.files[0]
+function DropZone() {
 
-        const fileReader = new FileReader();
+    const handleZoneEnter = async (topEvent: any) => {
+        await listen("tauri://file-drop", async (e: { event: string, windowLabel: string, payload: string[], id: number }) => {
+            const transferEntity: AudioFileUploadMessage = {
+                id: e.id,
+                path: e.payload[0]
+            }
 
-        fileReader.readAsArrayBuffer(fileHandle)
+            if (topEvent.target.classList.contains("drop-zone")) {
+                await uploadSample(transferEntity)
+            }
+        })
 
-        fileReader.onloadend = (e: any) => {
-            console.log(e.target.result)
-        }
     }
 
     return (
+        <div className="file-drop-zone" onMouseEnter={handleZoneEnter} style={{ height: "3rem", width: "10rem", backgroundColor: "white", margin: "1rem auto" }}>
+            <p className="drop-zone">DROP YOUR FILES HERE</p>
+        </div>
+    )
+}
+
+export function UploadSampleForm() {
+    return (
         <div>
-            <input type="file" onChange={handleFileUpload} />
+            <DropZone />
         </div>
     )
 }
