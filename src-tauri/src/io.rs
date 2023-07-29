@@ -117,14 +117,16 @@ impl SampleHandler {
         let mut data_dir = Self::data_dir();
         data_dir.push(filename);
 
-        let mut file = File::open(&data_dir).unwrap();
-        let mut tag = id3::Tag::read_from_path(&data_dir).unwrap();
+        let file = File::open(&data_dir).unwrap();
 
         file.metadata()
     }
 
-    pub fn play_sample(filename: &str) {
-        let full_path = Self::file_path(filename);
-        play_from_file(&full_path);
+    pub fn play_sample(filename: String) -> Result<(), Box<dyn std::error::Error>> {
+        let full_path = Self::file_path(&filename);
+
+        play_from_file(&full_path)?;
+
+        Ok(())
     }
 }

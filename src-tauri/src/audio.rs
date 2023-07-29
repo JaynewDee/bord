@@ -8,7 +8,7 @@ pub fn play_beep() -> Result<(), anyhow::Error> {
     let (device, config) = output_config()?;
     let sample_rate = config.sample_rate().0 as f32;
 
-    let mut sample_buffer = generate_sound_sample(440.0, sample_rate, 2.0); // 440Hz sine wave for 2 seconds
+    let sample_buffer = generate_sound_sample(440.0, sample_rate, 2.0); // 440Hz sine wave for 2 seconds
     let mut offset = 0;
 
     let stream = device.build_output_stream(
@@ -51,12 +51,19 @@ fn generate_sound_sample(frequency: f32, sample_rate: f32, duration: f32) -> Vec
         .collect()
 }
 
-pub fn play_from_file(filepath: &std::path::PathBuf) {
-    let mut sl = Soloud::default().unwrap();
+pub fn play_from_file(filepath: &std::path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    for _ in 0..50 {
+        print!("=")
+    }
+    print!("\n");
+
+    let start = std::time::Instant::now();
+
+    let sl = Soloud::default()?;
 
     let mut wav = audio::Wav::default();
 
-    wav.load(filepath).unwrap();
+    wav.load(filepath)?;
 
     sl.play(&wav);
 
@@ -64,5 +71,10 @@ pub fn play_from_file(filepath: &std::path::PathBuf) {
         std::thread::sleep(std::time::Duration::from_millis(100));
     }
 
+    let elapsed = std::time::Instant::now() - start;
+
+    println!("Elapsed duration: {:?}", &elapsed);
     println!("End of 'play_from_file' ");
+
+    Ok(())
 }

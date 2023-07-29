@@ -7,20 +7,27 @@ enum Command {
     Default = "default_sound",
     Upload = "upload_sample",
     AllSamples = "samples_list",
-    DeleteSample = "delete_sample"
+    DeleteSample = "delete_sample",
+    PlaySample = "play_sample"
 }
 
-export const playBeep = async () =>
-    await invoke(Command.Default, { msg: defaultMsg(Command.Default) })
+export default class Invoker {
+    static playBeep = async () =>
+        await invoke(Command.Default, { msg: defaultMsg(Command.Default) })
 
-export const uploadSample = async (message: AudioFileUploadMessage) => {
-    await invoke(Command.Upload, { message })
-}
+    static uploadSample = async (message: AudioFileUploadMessage) => {
+        await invoke(Command.Upload, { message })
+    }
 
-export const samplesList = async () => {
-    return await invoke(Command.AllSamples)
-}
+    static samplesList = async () => {
+        return await invoke(Command.AllSamples)
+    }
 
-export const deleteSample = async (name: string) => {
-    await invoke(Command.DeleteSample, { name })
+    static deleteSample = async (name: string) => {
+        return await invoke(Command.DeleteSample, { name })
+    }
+
+    static playSample = async (name: string) => {
+        await invoke(Command.PlaySample, { name })
+    }
 }

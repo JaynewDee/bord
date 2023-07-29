@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
-import { samplesList, uploadSample } from "../ffi/invoke";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import Invoker from "../ffi/invoke";
 import { listen } from '@tauri-apps/api/event';
 
 export type AudioFileUploadMessage = {
@@ -13,22 +13,21 @@ type DropEvent = { event: string, windowLabel: string, payload: string[], id: nu
 
 function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
 
-    const handleZoneEnter = async (topEvent: any) => {
-        await listen("tauri://file-drop", async (e: DropEvent) => {
+    useEffect(() => {
+        const unlisten = listen("tauri://file-drop", async (e: DropEvent) => {
             const transferEntity: AudioFileUploadMessage = {
                 id: e.id,
                 path: e.payload[0]
             }
 
-            if (topEvent.target.classList.contains("drop-zone")) {
-                await uploadSample(transferEntity)
-                await samplesList().then(samples => setUserSamples(samples))
-            }
+            await Invoker.uploadSample(transferEntity)
+            Invoker.samplesList().then(samples => setUserSamples(samples))
         })
-    }
+
+    }, [])
 
     return (
-        <div className="file-drop-zone" onMouseEnter={handleZoneEnter} style={{ height: "3rem", width: "10rem", backgroundColor: "white", margin: "1rem auto" }}>
+        <div className="file-drop-zone" style={{ height: "3rem", width: "10rem", backgroundColor: "white", margin: "1rem auto" }}>
             <p className="drop-zone">DROP YOUR FILES HERE</p>
         </div>
     )

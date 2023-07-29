@@ -9,6 +9,11 @@
     margin: 1rem auto;
 }
 
+.sample-list-item:hover {
+    color: rgba(200, 230, 240, .9);
+    cursor: pointer;
+}
+
 .delete-sample-btn {
     margin-right: 1rem;
     cursor: pointer;

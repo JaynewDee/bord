@@ -39,7 +39,4 @@ pub fn delete_sample(name: &str) -> SoundsList {
 }
 
 #[tauri::command]
-pub fn play_sample(name: &str) {
-    println!("{}", &name);
-    SampleHandler::play_sample(name);
-}
+pub fn play_sample(name: String) {}
