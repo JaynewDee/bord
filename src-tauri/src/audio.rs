@@ -3,6 +3,7 @@ use cpal::{Device, SupportedStreamConfig};
 use std::thread;
 use std::time::Duration;
 
+// Default beep sound acts as a ping to audio state on backend
 pub fn play_beep() -> Result<(), anyhow::Error> {
     let (device, config) = output_config()?;
     let sample_rate = config.sample_rate().0 as f32;

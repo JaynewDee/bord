@@ -7,6 +7,7 @@ use ffi::{default_sound, greet, upload_sample};
 
 mod audio;
 mod ffi;
+mod io;
 
 fn main() {
     tauri::Builder::default()
