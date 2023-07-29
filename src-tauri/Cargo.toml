@@ -19,6 +19,7 @@ tauri = { version = "1.2", features = ["fs-all", "shell-open", "window-all"] }
 cpal = "0.15.2"
 anyhow = "1.0.72"
 id3 = "1.7.0"
+soloud = "1.0.2"
 
 [features]
 # by default Tauri runs in production mode

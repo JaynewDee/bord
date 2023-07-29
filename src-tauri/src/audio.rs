@@ -1,8 +1,8 @@
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{Device, SupportedStreamConfig};
+use soloud::*;
 use std::thread;
 use std::time::Duration;
-
 // Default beep sound acts as a ping to audio state on backend
 pub fn play_beep() -> Result<(), anyhow::Error> {
     let (device, config) = output_config()?;
@@ -49,4 +49,20 @@ fn generate_sound_sample(frequency: f32, sample_rate: f32, duration: f32) -> Vec
     (0..sample_len)
         .map(|i| ((i as f32 * frequency * 2.0 * std::f32::consts::PI / sample_rate).sin()))
         .collect()
+}
+
+pub fn play_from_file(filepath: &std::path::PathBuf) {
+    let mut sl = Soloud::default().unwrap();
+
+    let mut wav = audio::Wav::default();
+
+    wav.load(filepath).unwrap();
+
+    sl.play(&wav);
+
+    while sl.voice_count() > 0 {
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+
+    println!("End of 'play_from_file' ");
 }

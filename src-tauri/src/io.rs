@@ -5,6 +5,7 @@ use std::{
     path::PathBuf,
 };
 
+use super::audio::play_from_file;
 use serde::{Deserialize, Serialize};
 
 pub struct SampleHandler;
@@ -17,6 +18,7 @@ pub struct SampleMessage {
 
 pub trait TempHandler {
     fn destination(path: &str) -> PathBuf;
+    fn file_path(filename: &str) -> PathBuf;
     fn get_all_entries() -> SoundsList;
     fn data_dir() -> PathBuf;
 }
@@ -72,6 +74,14 @@ impl TempHandler for SampleHandler {
 
         full_list
     }
+
+    fn file_path(filename: &str) -> PathBuf {
+        let mut data_dir = Self::data_dir();
+
+        data_dir.push(filename);
+
+        data_dir
+    }
 }
 
 impl SampleHandler {
@@ -111,14 +121,10 @@ impl SampleHandler {
         let mut tag = id3::Tag::read_from_path(&data_dir).unwrap();
 
         file.metadata()
+    }
 
-        // Get the file size in bytes.
-        // let file_size = file.metadata().unwrap().len();
-
-        // // Calculate the total duration in seconds based on the average bit rate and file size.
-        // let total_duration = (file_size * 8) as f64 / (average_bit_rate * 1000) as f64;
-
-        // println!("Total duration: {:.2} seconds", total_duration);
-        // total_duration
+    pub fn play_sample(filename: &str) {
+        let full_path = Self::file_path(filename);
+        play_from_file(&full_path);
     }
 }
