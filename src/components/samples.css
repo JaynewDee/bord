@@ -1,0 +1,18 @@
+.sample-list {
+}
+
+.sample-list-item {
+    display: flex;
+    width: 33%;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem auto;
+}
+
+.delete-sample-btn {
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.drop-zone {
+ }

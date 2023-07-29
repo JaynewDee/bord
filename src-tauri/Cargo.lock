@@ -194,6 +194,7 @@ version = "0.0.0"
 dependencies = [
  "anyhow",
  "cpal",
+ "id3",
  "serde",
  "serde_json",
  "tauri",
@@ -1325,6 +1326,17 @@ checksum = "e3804960be0bb5e4edb1e1ad67afd321a9ecfd875c3e65c099468fd2717d7cae"
 dependencies = [
  "byteorder",
  "png",
+]
+
+[[package]]
+name = "id3"
+version = "1.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9389dd9c8c4671b1e4b2878a6329bccb573f9c24a75bc91c641c451ce5436501"
+dependencies = [
+ "bitflags 2.3.3",
+ "byteorder",
+ "flate2",
 ]
 
 [[package]]

@@ -6,7 +6,8 @@ use std::{
 };
 
 use serde::{Deserialize, Serialize};
-pub struct FileHandler;
+
+pub struct SampleHandler;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SampleMessage {
@@ -15,8 +16,6 @@ pub struct SampleMessage {
 }
 
 pub trait TempHandler {
-    const ROOT: PathBuf = std::env::temp_dir();
-
     fn destination(path: &str) -> PathBuf;
     fn get_all_entries() -> SoundsList;
     fn data_dir() -> PathBuf;
@@ -24,7 +23,7 @@ pub trait TempHandler {
 
 pub type SoundsList = Vec<String>;
 
-impl TempHandler for FileHandler {
+impl TempHandler for SampleHandler {
     fn destination(path: &str) -> PathBuf {
         let path_buf = PathBuf::from(path);
 
@@ -32,7 +31,7 @@ impl TempHandler for FileHandler {
 
         let last = segments[segments.len() - 1];
 
-        let mut destination_path: PathBuf = Self::ROOT;
+        let mut destination_path: PathBuf = std::env::temp_dir();
 
         destination_path.push("bord_data");
 
@@ -42,7 +41,7 @@ impl TempHandler for FileHandler {
     }
 
     fn data_dir() -> PathBuf {
-        let mut destination_path: PathBuf = Self::ROOT;
+        let mut destination_path: PathBuf = std::env::temp_dir();
 
         destination_path.push("bord_data");
 
@@ -75,7 +74,7 @@ impl TempHandler for FileHandler {
     }
 }
 
-impl FileHandler {
+impl SampleHandler {
     pub fn save_sample(message: SampleMessage) {
         let mut file = File::open(&message.path).unwrap();
 
@@ -90,5 +89,36 @@ impl FileHandler {
         let mut output_file = File::create(&destination).unwrap();
 
         output_file.write_all(&buffer);
+    }
+
+    pub fn delete_one(name: &str) {
+        let mut data_dir = Self::data_dir();
+
+        data_dir.push(name);
+
+        let path = std::path::Path::new(&data_dir);
+
+        std::fs::remove_file(path);
+
+        println!("Sample {} removed.", &name);
+    }
+
+    pub fn metadata(filename: &str) -> Result<std::fs::Metadata, std::io::Error> {
+        let mut data_dir = Self::data_dir();
+        data_dir.push(filename);
+
+        let mut file = File::open(&data_dir).unwrap();
+        let mut tag = id3::Tag::read_from_path(&data_dir).unwrap();
+
+        file.metadata()
+
+        // Get the file size in bytes.
+        // let file_size = file.metadata().unwrap().len();
+
+        // // Calculate the total duration in seconds based on the average bit rate and file size.
+        // let total_duration = (file_size * 8) as f64 / (average_bit_rate * 1000) as f64;
+
+        // println!("Total duration: {:.2} seconds", total_duration);
+        // total_duration
     }
 }
