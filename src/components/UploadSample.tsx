@@ -13,18 +13,8 @@ type DropEvent = { event: string, windowLabel: string, payload: string[], id: nu
 
 function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
 
-    useEffect(() => {
-        const unlisten = listen("tauri://file-drop", async (e: DropEvent) => {
-            const transferEntity: AudioFileUploadMessage = {
-                id: e.id,
-                path: e.payload[0]
-            }
 
-            await Invoker.uploadSample(transferEntity)
-            Invoker.samplesList().then(samples => setUserSamples(samples))
-        })
-
-    }, [])
+    const unlisten = useFileDrop(setUserSamples);
 
     return (
         <div className="file-drop-zone" style={{ height: "3rem", width: "10rem", backgroundColor: "white", margin: "1rem auto" }}>
@@ -39,4 +29,19 @@ export function UploadSampleForm({ setUserSamples }: { setUserSamples: Setter })
             <DropZone setUserSamples={setUserSamples} />
         </div>
     )
+}
+
+
+function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
+    const unlisten = listen("tauri://file-drop", async (e: DropEvent) => {
+        const transferEntity: AudioFileUploadMessage = {
+            id: e.id,
+            path: e.payload[0]
+        }
+
+        await Invoker.uploadSample(transferEntity)
+        Invoker.samplesList().then(samples => setter(samples))
+    })
+
+    return unlisten
 }

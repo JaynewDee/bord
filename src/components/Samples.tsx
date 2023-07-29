@@ -11,16 +11,12 @@ interface SamplesProps {
 
 export function Samples({ userSamples, setUserSamples }: SamplesProps) {
 
-    useEffect(() => {
-        Invoker.samplesList().then(samples => setUserSamples(samples))
-    }, [])
-
     return (
         <div>
             <h3>Your Samples</h3>
             <div className="sample-list">
                 {
-                    userSamples ? userSamples.map((s: any) => <Sample s={s} setSamples={setUserSamples} />) : <></>
+                    userSamples ? userSamples.map((s: any) => <Sample s={s} key={s} setSamples={setUserSamples} />) : <></>
                 }
             </div>
         </div>

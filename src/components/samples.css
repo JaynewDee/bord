@@ -19,5 +19,7 @@
     cursor: pointer;
 }
 
-.drop-zone {
- }
+.file-drop-zone {
+  color: black;
+}
+

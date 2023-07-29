@@ -1,0 +1,19 @@
+.main-nav {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+}
+
+.main-nav > p {
+ margin: 0 .2rem;
+ cursor: pointer;
+ padding: 3px;
+ }
+
+ .main-nav > span {
+    color: black;
+    font-size: 115%;
+ }
+ .main-nav > p:hover {
+    outline: 1px solid black;
+ }

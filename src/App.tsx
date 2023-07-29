@@ -1,20 +1,35 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import SoundBoard from "./components/SoundBoard";
+import SampleManager from "./components/SampleManager";
+import MainNav from "./components/MainNav";
 import Invoker from "./ffi/invoke";
-import { UploadSampleForm } from './components/UploadSample'
-import { Samples } from "./components/Samples";
 
 function App() {
-  const [userSamples, setUserSamples] = useState([])
+  const [userSamples, setUserSamples] = useState<string[]>([])
+
+  const [displayState, setDisplayState] = useState("board");
 
   ///////
 
+  useEffect(() => {
+    Invoker.samplesList().then((samples: any) => setUserSamples(samples))
+  }, [])
+
+  const displaySwitch = (state: string) => {
+    const displays: { [key: string]: JSX.Element } = {
+      "board": <SoundBoard />,
+      "samples": <SampleManager samples={userSamples} setter={setUserSamples} />,
+    }
+
+    return displays[state] || <></>
+  }
+
   return (
-    <div className="container">
-      <UploadSampleForm setUserSamples={setUserSamples} />
-      <button onClick={Invoker.playBeep}>BEEP</button>
-      <Samples userSamples={userSamples} setUserSamples={setUserSamples} />
-    </div>
+    <main className="App">
+      {MainNav(setDisplayState)}
+      {displaySwitch(displayState)}
+    </main>
   );
 }
 
