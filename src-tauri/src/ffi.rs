@@ -1,5 +1,5 @@
 use super::audio::{play_beep, Sample};
-use super::io::{SampleHandler, SampleMessage, SoundsList, TempHandler};
+use super::io::{SampleHandler, SampleMessage, TempHandler};
 
 #[tauri::command]
 pub fn greet(name: &str) -> String {

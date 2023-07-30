@@ -59,6 +59,7 @@ fn output_config() -> Result<(Device, SupportedStreamConfig), anyhow::Error> {
 
 fn generate_sound_sample(frequency: f32, sample_rate: f32, duration: f32) -> Vec<f32> {
     let sample_len = (sample_rate * duration) as usize;
+
     (0..sample_len)
         .map(|i| ((i as f32 * frequency * 2.0 * std::f32::consts::PI / sample_rate).sin()))
         .collect()

@@ -1,19 +1,22 @@
 .main-nav {
-    display: flex;
-    align-items: center;
-    margin-top: 0;
+   display: flex;
+   align-items: center;
+   margin-top: 0;
+   border-bottom: 3px solid white;
+   padding-bottom: 5px;
 }
 
-.main-nav > p {
- margin: 0 .2rem;
- cursor: pointer;
- padding: 3px;
- }
+.main-nav>p {
+   margin: 0 .2rem;
+   cursor: pointer;
+   padding: 3px;
+}
 
- .main-nav > span {
-    color: black;
-    font-size: 115%;
- }
- .main-nav > p:hover {
-    outline: 1px solid black;
- }
+.main-nav>span {
+   color: black;
+   font-size: 115%;
+}
+
+.main-nav>p:hover {
+   outline: 1px solid black;
+}

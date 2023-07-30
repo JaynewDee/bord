@@ -61,13 +61,12 @@ impl TempHandler for SampleHandler {
         for entry in entries {
             let path = entry.unwrap().path();
 
-            // Check if the entry is a file.
             if path.is_file() {
-                // Get the file name as a string.
                 if let Some(file_name) = path.file_name() {
                     if let Some(file_name_str) = file_name.to_str() {
                         let sample = Sample {
                             name: file_name_str.to_owned(),
+                            // Probably shouldn't open every file just for duration.  Should record duration on save?
                             duration: Self::duration(&File::open(path).unwrap()),
                         };
                         samples_list.push(sample);

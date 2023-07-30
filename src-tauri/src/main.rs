@@ -10,6 +10,8 @@ mod audio;
 mod ffi;
 mod io;
 
+const _APP_NAME: &str = "BORD";
+
 fn app_setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     app.listen_global("play_sample", |event| {
         if let Some(pl) = event.payload() {

@@ -1,12 +1,68 @@
-
 .soundboard-main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     margin: 5rem auto;
-    grid-gap: 10px;
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    border: 5px solid;
+    padding: 3rem;
 }
 
-.soundboard-main > * {
-    border: 1px solid white;
+.soundboard-main>div {
+    display: flex;
+    margin: auto;
+}
+
+.sample-pad>* {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.soundboard-main>div:nth-child(1) {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.soundboard-main>div:nth-child(3) {
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.soundboard-main>div:nth-child(2) {
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.soundboard-main>div:nth-child(4) {
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.soundboard-main>div:nth-child(6) {
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.soundboard-main>div:nth-child(5) {
+    justify-content: center;
+    align-items: center;
+}
+
+.soundboard-main>div:nth-child(7) {
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.soundboard-main>div:nth-child(8) {
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.sample-pad {
+    width: 100%;
+    height: 100%;
 }
