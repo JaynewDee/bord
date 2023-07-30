@@ -3,16 +3,17 @@ use cpal::{Device, SupportedStreamConfig};
 use serde::{Deserialize, Serialize};
 use soloud::*;
 use std::thread;
-use std::time::Duration;
+use std::time;
 
 #[derive(Debug, Serialize, Deserialize)]
-struct BoardConfig {
-    samples: Vec<Sample>,
+pub struct BoardConfig {
+    pub samples: Vec<Sample>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Sample {
     pub name: String,
+    pub filename: String,
     pub duration: f64,
 }
 
@@ -36,12 +37,12 @@ pub fn play_beep() -> Result<(), anyhow::Error> {
             }
         },
         |err| eprintln!("An error occurred on the audio stream: {:?}", err),
-        Some(Duration::from_secs(5)),
+        Some(time::Duration::from_secs(5)),
     )?;
 
     stream.play()?;
 
-    thread::sleep(Duration::from_secs(1));
+    thread::sleep(time::Duration::from_secs(1));
 
     Ok(())
 }
@@ -71,7 +72,7 @@ pub fn play_from_file(filepath: &std::path::PathBuf) -> Result<(), Box<dyn std::
     }
     print!("\n");
 
-    let start = std::time::Instant::now();
+    let start = time::Instant::now();
 
     let sl = Soloud::default()?;
 
@@ -82,10 +83,10 @@ pub fn play_from_file(filepath: &std::path::PathBuf) -> Result<(), Box<dyn std::
     sl.play(&wav);
 
     while sl.voice_count() > 0 {
-        std::thread::sleep(std::time::Duration::from_millis(100));
+        thread::sleep(time::Duration::from_millis(100));
     }
 
-    let elapsed = std::time::Instant::now() - start;
+    let elapsed = time::Instant::now() - start;
 
     println!("Elapsed duration: {:?}", &elapsed);
     println!("End of 'play_from_file' ");

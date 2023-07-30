@@ -34,10 +34,8 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
 }
 
 export function Samples({ userSamples, setUserSamples }: SamplesProps) {
-
     return (
         <div>
-            <h3>Your Samples</h3>
             <div className="sample-list">
                 {
                     userSamples ? userSamples.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>

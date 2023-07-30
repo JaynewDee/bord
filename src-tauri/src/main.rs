@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use ffi::{default_sound, delete_sample, greet, play_sample, samples_list, upload_sample};
+use ffi::{board_config, default_sound, delete_sample, greet, samples_list, upload_sample};
 use tauri::Manager;
 
 mod audio;
@@ -31,7 +31,7 @@ fn main() {
             default_sound,
             upload_sample,
             samples_list,
-            play_sample,
+            board_config,
             delete_sample
         ])
         .run(tauri::generate_context!())

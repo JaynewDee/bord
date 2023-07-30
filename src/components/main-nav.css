@@ -18,5 +18,5 @@
 }
 
 .main-nav>p:hover {
-   outline: 1px solid black;
+   text-decoration: overline 1px white;
 }

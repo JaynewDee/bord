@@ -7,6 +7,7 @@ enum Command {
     Default = "default_sound",
     Upload = "upload_sample",
     AllSamples = "samples_list",
+    BoardConfig = "board_config",
     DeleteSample = "delete_sample",
     PlaySample = "play_sample"
 }
@@ -23,6 +24,9 @@ export default class Invoker {
         return await invoke(Command.AllSamples)
     }
 
+    static boardConfig = async (): Promise<any> => {
+        return await invoke(Command.BoardConfig)
+    }
     static deleteSample = async (name: string) => {
         return await invoke(Command.DeleteSample, { name })
     }

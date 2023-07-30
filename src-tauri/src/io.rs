@@ -6,7 +6,7 @@ use std::{
 };
 
 use super::audio::play_from_file;
-use super::audio::Sample;
+use super::audio::{BoardConfig, Sample};
 use serde::{Deserialize, Serialize};
 
 pub struct SampleHandler;
@@ -22,6 +22,7 @@ pub trait TempHandler {
     fn file_path(filename: &str) -> PathBuf;
     fn get_all_entries() -> Vec<Sample>;
     fn data_dir() -> PathBuf;
+    fn config_dir() -> PathBuf;
 }
 
 pub type SoundsList = Vec<String>;
@@ -51,6 +52,14 @@ impl TempHandler for SampleHandler {
         destination_path
     }
 
+    fn config_dir() -> PathBuf {
+        let mut config_path: PathBuf = std::env::temp_dir();
+
+        config_path.push("bord_config");
+
+        config_path
+    }
+
     fn get_all_entries() -> Vec<Sample> {
         let path = Self::data_dir();
 
@@ -66,6 +75,7 @@ impl TempHandler for SampleHandler {
                     if let Some(file_name_str) = file_name.to_str() {
                         let sample = Sample {
                             name: file_name_str.to_owned(),
+                            filename: file_name_str.to_owned(),
                             // Probably shouldn't open every file just for duration.  Should record duration on save?
                             duration: Self::duration(&File::open(path).unwrap()),
                         };
@@ -136,5 +146,24 @@ impl SampleHandler {
         play_from_file(&full_path)?;
 
         Ok(())
+    }
+
+    pub fn read_board_config() -> BoardConfig {
+        let mut temp_path = Self::config_dir();
+        temp_path.push("board_config.json");
+
+        if let Ok(mut config) = File::open(&temp_path) {
+            let mut data = String::new();
+
+            config.read_to_string(&mut data).unwrap();
+
+            if let Ok(config) = serde_json::from_str(&data) {
+                config
+            } else {
+                BoardConfig { samples: vec![] }
+            }
+        } else {
+            BoardConfig { samples: vec![] }
+        }
     }
 }

@@ -1,3 +1,5 @@
+use crate::audio::BoardConfig;
+
 use super::audio::{play_beep, Sample};
 use super::io::{SampleHandler, SampleMessage, TempHandler};
 
@@ -13,6 +15,7 @@ pub fn default_sound(msg: &str) {
 
     let _ = play_beep();
 }
+
 #[tauri::command]
 pub fn upload_sample(message: SampleMessage) {
     SampleHandler::save_sample(message);
@@ -39,4 +42,6 @@ pub fn delete_sample(name: &str) -> Vec<Sample> {
 }
 
 #[tauri::command]
-pub fn play_sample(name: String) {}
+pub fn board_config() -> BoardConfig {
+    SampleHandler::read_board_config()
+}

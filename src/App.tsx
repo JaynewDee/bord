@@ -10,10 +10,13 @@ function App() {
 
   const [displayState, setDisplayState] = useState("board");
 
+  const [boardConfig, setBoardConfig] = useState([]);
+
   ///////
 
   useEffect(() => {
     Invoker.samplesList().then((samples: any) => setUserSamples(samples))
+    Invoker.boardConfig().then((config: any) => config && setBoardConfig(config)).then(() => console.log(boardConfig))
   }, [])
 
   const displaySwitch = (state: string) => {
