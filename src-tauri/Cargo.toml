@@ -20,6 +20,7 @@ cpal = "0.15.2"
 anyhow = "1.0.72"
 id3 = "1.7.0"
 soloud = "1.0.2"
+mp3-duration = "0.1.10"
 
 [features]
 # by default Tauri runs in production mode

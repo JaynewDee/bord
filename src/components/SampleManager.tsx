@@ -6,6 +6,7 @@ interface ManagerProps {
     samples: any,
     setter: Dispatch<SetStateAction<any>>
 }
+
 const SampleManager = ({ samples, setter }: ManagerProps) => {
     return (
         <div>

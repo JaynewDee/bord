@@ -1,8 +1,21 @@
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use cpal::{Device, SupportedStreamConfig};
+use serde::{Deserialize, Serialize};
 use soloud::*;
 use std::thread;
 use std::time::Duration;
+
+#[derive(Debug, Serialize, Deserialize)]
+struct BoardConfig {
+    samples: Vec<Sample>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Sample {
+    pub name: String,
+    pub duration: f64,
+}
+
 // Default beep sound acts as a ping to audio state on backend
 pub fn play_beep() -> Result<(), anyhow::Error> {
     let (device, config) = output_config()?;

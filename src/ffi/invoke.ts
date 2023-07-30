@@ -19,7 +19,7 @@ export default class Invoker {
         await invoke(Command.Upload, { message })
     }
 
-    static samplesList = async () => {
+    static samplesList = async (): Promise<[{ duration: number, name: string }]> => {
         return await invoke(Command.AllSamples)
     }
 

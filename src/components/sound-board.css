@@ -1,0 +1,12 @@
+
+.soundboard-main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    margin: 5rem auto;
+    grid-gap: 10px;
+}
+
+.soundboard-main > * {
+    border: 1px solid white;
+}

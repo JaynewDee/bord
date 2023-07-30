@@ -9,20 +9,6 @@ interface SamplesProps {
     setUserSamples: Dispatch<SetStateAction<any>>
 }
 
-export function Samples({ userSamples, setUserSamples }: SamplesProps) {
-
-    return (
-        <div>
-            <h3>Your Samples</h3>
-            <div className="sample-list">
-                {
-                    userSamples ? userSamples.map((s: any) => <Sample s={s} key={s} setSamples={setUserSamples} />) : <></>
-                }
-            </div>
-        </div>
-    )
-}
-
 function Sample({ s, setSamples }: { s: any, setSamples: any }) {
     const sampleRef = useRef(null);
 
@@ -36,16 +22,27 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
 
     const handlePlaySample = async () => {
         const curr = sampleRef.current as any;
-
         emit("play_sample", curr.textContent)
-
-        // await Invoker.playSample(curr.textContent)
     }
 
     return (
         <div className="sample-list-item">
             <span className="delete-sample-btn" onClick={handleDelete}>X</span>
-            <p onClick={handlePlaySample} ref={sampleRef}>{s}</p>
+            <p onClick={handlePlaySample} ref={sampleRef}>{s.name}</p>
+        </div>
+    )
+}
+
+export function Samples({ userSamples, setUserSamples }: SamplesProps) {
+
+    return (
+        <div>
+            <h3>Your Samples</h3>
+            <div className="sample-list">
+                {
+                    userSamples ? userSamples.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
+                }
+            </div>
         </div>
     )
 }

@@ -20,6 +20,9 @@
 }
 
 .file-drop-zone {
-  color: black;
+  color: rgba(0, 59, 120, 1);
+  background-color: white;
+  margin-top: 3rem;
+  text-align: center;
 }
 

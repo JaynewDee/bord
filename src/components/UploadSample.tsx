@@ -13,13 +13,15 @@ type DropEvent = { event: string, windowLabel: string, payload: string[], id: nu
 
 function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
 
-
-    const unlisten = useFileDrop(setUserSamples);
+    useEffect(() => {
+        useFileDrop(setUserSamples);
+    }, [])
 
     return (
-        <div className="file-drop-zone" style={{ height: "3rem", width: "10rem", backgroundColor: "white", margin: "1rem auto" }}>
-            <p className="drop-zone">DROP YOUR FILES HERE</p>
+        <div className="file-drop-zone">
+            DROP MP3 SAMPLES ONTO THE WINDOW TO ADD THEM
         </div>
+
     )
 }
 
@@ -33,7 +35,7 @@ export function UploadSampleForm({ setUserSamples }: { setUserSamples: Setter })
 
 
 function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
-    const unlisten = listen("tauri://file-drop", async (e: DropEvent) => {
+    const _ = listen("tauri://file-drop", async (e: DropEvent) => {
         const transferEntity: AudioFileUploadMessage = {
             id: e.id,
             path: e.payload[0]
@@ -42,6 +44,4 @@ function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
         await Invoker.uploadSample(transferEntity)
         Invoker.samplesList().then(samples => setter(samples))
     })
-
-    return unlisten
 }

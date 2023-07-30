@@ -6,6 +6,7 @@ use std::{
 };
 
 use super::audio::play_from_file;
+use super::audio::Sample;
 use serde::{Deserialize, Serialize};
 
 pub struct SampleHandler;
@@ -19,7 +20,7 @@ pub struct SampleMessage {
 pub trait TempHandler {
     fn destination(path: &str) -> PathBuf;
     fn file_path(filename: &str) -> PathBuf;
-    fn get_all_entries() -> SoundsList;
+    fn get_all_entries() -> Vec<Sample>;
     fn data_dir() -> PathBuf;
 }
 
@@ -50,29 +51,32 @@ impl TempHandler for SampleHandler {
         destination_path
     }
 
-    fn get_all_entries() -> SoundsList {
+    fn get_all_entries() -> Vec<Sample> {
         let path = Self::data_dir();
 
         let entries = std::fs::read_dir(path).unwrap();
 
-        let mut full_list: Vec<String> = vec![];
+        let mut samples_list: Vec<Sample> = vec![];
 
         for entry in entries {
-            let entry = entry.unwrap();
-            let path = entry.path();
+            let path = entry.unwrap().path();
 
             // Check if the entry is a file.
             if path.is_file() {
                 // Get the file name as a string.
                 if let Some(file_name) = path.file_name() {
                     if let Some(file_name_str) = file_name.to_str() {
-                        full_list.push(file_name_str.to_owned());
+                        let sample = Sample {
+                            name: file_name_str.to_owned(),
+                            duration: Self::duration(&File::open(path).unwrap()),
+                        };
+                        samples_list.push(sample);
                     }
                 }
             }
         }
 
-        full_list
+        samples_list
     }
 
     fn file_path(filename: &str) -> PathBuf {
@@ -87,7 +91,6 @@ impl TempHandler for SampleHandler {
 impl SampleHandler {
     pub fn save_sample(message: SampleMessage) {
         let mut file = File::open(&message.path).unwrap();
-
         let destination = Self::destination(&message.path);
         let metadata = file.metadata().unwrap();
 
@@ -98,7 +101,13 @@ impl SampleHandler {
 
         let mut output_file = File::create(&destination).unwrap();
 
-        output_file.write_all(&buffer);
+        let _ = output_file.write_all(&buffer);
+    }
+
+    fn duration(file: &File) -> f64 {
+        let duration = mp3_duration::from_file(&file).unwrap();
+
+        duration.as_secs_f64()
     }
 
     pub fn delete_one(name: &str) {
@@ -108,7 +117,7 @@ impl SampleHandler {
 
         let path = std::path::Path::new(&data_dir);
 
-        std::fs::remove_file(path);
+        let _ = std::fs::remove_file(path);
 
         println!("Sample {} removed.", &name);
     }
