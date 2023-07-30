@@ -1,7 +1,12 @@
+import { BoardConfig } from "../App";
 import Invoker from "../ffi/invoke";
 import "./sound-board.css";
 
-const SoundBoard = () => {
+///////
+
+const SoundBoard = ({ configuration }: { configuration: BoardConfig }) => {
+    console.log(configuration)
+
     return (
         <div className="soundboard-main">
             <div className="sample-pad">

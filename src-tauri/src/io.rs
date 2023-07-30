@@ -1,14 +1,12 @@
 // write audio to new file at temp destination
 use std::{
-    fs::File,
-    io::{Read, Write},
-    path::PathBuf,
+    fs::{File, OpenOptions},
+    io::{Read, Seek, Write},
+    path::{Path, PathBuf},
 };
 
-use super::audio::play_from_file;
-use super::audio::{BoardConfig, Sample};
+use super::audio::{play_from_file, BoardConfig, Sample};
 use serde::{Deserialize, Serialize};
-
 pub struct SampleHandler;
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -17,17 +15,41 @@ pub struct SampleMessage {
     path: String,
 }
 
-pub trait TempHandler {
-    fn destination(path: &str) -> PathBuf;
-    fn file_path(filename: &str) -> PathBuf;
-    fn get_all_entries() -> Vec<Sample>;
-    fn data_dir() -> PathBuf;
-    fn config_dir() -> PathBuf;
+trait PathManager<P: AsRef<Path> + ?Sized> {
+    fn carve(dir: &P) -> ();
+    fn temp() -> P;
+    fn append(source: &mut P, target: &P) -> P;
+    fn filename(p: &mut P) -> P;
 }
 
-pub type SoundsList = Vec<String>;
+impl PathManager<PathBuf> for SampleHandler {
+    fn carve(dir: &PathBuf) {
+        std::fs::create_dir_all(dir).unwrap();
+    }
+    fn temp() -> PathBuf {
+        std::env::temp_dir()
+    }
+    fn append(source: &mut PathBuf, target: &PathBuf) -> PathBuf {
+        source.push(target);
+        source.to_path_buf()
+    }
+    fn filename(p: &mut PathBuf) -> PathBuf {
+        if let Some(segment) = p.file_name() {
+            return PathBuf::from(segment);
+        }
+        PathBuf::new()
+    }
+}
+trait FileManager<F: Read + Write + Seek, P: PathManager<Path> + ?Sized> {
+    fn dir_entries(dir: P) -> Vec<F>;
+}
 
-impl TempHandler for SampleHandler {
+trait AudioAware<A, F> {
+    fn duration(f: &F) -> f64;
+    fn mime_type(p: PathBuf) -> String;
+}
+
+impl SampleHandler {
     fn destination(path: &str) -> PathBuf {
         let path_buf = PathBuf::from(path);
 
@@ -39,9 +61,14 @@ impl TempHandler for SampleHandler {
 
         destination_path.push("bord_data");
 
-        std::fs::create_dir_all(&destination_path).unwrap();
+        Self::carve_path(&destination_path);
+
         destination_path.push(last);
         destination_path
+    }
+
+    fn carve_path(dir: &PathBuf) {
+        std::fs::create_dir_all(dir).unwrap();
     }
 
     fn data_dir() -> PathBuf {
@@ -60,7 +87,7 @@ impl TempHandler for SampleHandler {
         config_path
     }
 
-    fn get_all_entries() -> Vec<Sample> {
+    pub fn get_all_entries() -> Vec<Sample> {
         let path = Self::data_dir();
 
         let entries = std::fs::read_dir(path).unwrap();
@@ -69,7 +96,7 @@ impl TempHandler for SampleHandler {
 
         for entry in entries {
             let path = entry.unwrap().path();
-
+            Self::mime_type(&path);
             if path.is_file() {
                 if let Some(file_name) = path.file_name() {
                     if let Some(file_name_str) = file_name.to_str() {
@@ -95,9 +122,7 @@ impl TempHandler for SampleHandler {
 
         data_dir
     }
-}
 
-impl SampleHandler {
     pub fn save_sample(message: SampleMessage) {
         let mut file = File::open(&message.path).unwrap();
         let destination = Self::destination(&message.path);
@@ -115,8 +140,12 @@ impl SampleHandler {
 
     fn duration(file: &File) -> f64 {
         let duration = mp3_duration::from_file(&file).unwrap();
-
         duration.as_secs_f64()
+    }
+
+    fn mime_type(path: &PathBuf) -> String {
+        let data_type = infer::get_from_path(path).unwrap();
+        data_type.unwrap().mime_type().to_string()
     }
 
     pub fn delete_one(name: &str) {
@@ -148,9 +177,40 @@ impl SampleHandler {
         Ok(())
     }
 
+    fn check_exists(path: &PathBuf) -> bool {
+        let file = OpenOptions::new().open(path);
+
+        if let Ok(read) = file {
+            println!("Pre-existing config found.");
+            true
+        } else {
+            println!("Config not found.");
+            false
+        }
+    }
+
+    fn init_board_config() {
+        println!("Initializing config ... ");
+        let mut config_path = Self::config_dir();
+
+        Self::carve_path(&config_path);
+
+        config_path.push("board_config.json");
+
+        println!("{:#?}", &config_path);
+        let file = OpenOptions::new().create(true).open(&config_path);
+
+        println!("{:#?}", &file);
+    }
+
     pub fn read_board_config() -> BoardConfig {
         let mut temp_path = Self::config_dir();
+
         temp_path.push("board_config.json");
+
+        if !Self::check_exists(&temp_path) {
+            Self::init_board_config();
+        };
 
         if let Ok(mut config) = File::open(&temp_path) {
             let mut data = String::new();

@@ -10,6 +10,8 @@ const MainNav = (setDisplay: Dispatch<SetStateAction<string>>) => {
             <p onClick={() => navigate("board")}>My Board</p>
             <span>|</span>
             <p onClick={() => navigate("samples")}>Manage Samples</p>
+            <span>|</span>
+            <p onClick={() => navigate("board_config")}>Configure Board</p>
         </nav>
     )
 }

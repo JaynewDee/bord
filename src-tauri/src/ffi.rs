@@ -1,7 +1,7 @@
 use crate::audio::BoardConfig;
 
 use super::audio::{play_beep, Sample};
-use super::io::{SampleHandler, SampleMessage, TempHandler};
+use super::io::{SampleHandler, SampleMessage};
 
 #[tauri::command]
 pub fn greet(name: &str) -> String {

@@ -4,13 +4,23 @@ import SoundBoard from "./components/SoundBoard";
 import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
 import Invoker from "./ffi/invoke";
+import ConfigBoard from "./components/ConfigBoard";
+
+type Sample = {
+  name: string,
+  assignment: string
+  filename: string,
+  duration: number
+}
+
+export type BoardConfig = Sample[]
 
 function App() {
   const [userSamples, setUserSamples] = useState<string[]>([])
 
   const [displayState, setDisplayState] = useState("board");
 
-  const [boardConfig, setBoardConfig] = useState([]);
+  const [boardConfig, setBoardConfig] = useState<BoardConfig | undefined>();
 
   ///////
 
@@ -21,8 +31,9 @@ function App() {
 
   const displaySwitch = (state: string) => {
     const displays: { [key: string]: JSX.Element } = {
-      "board": <SoundBoard />,
+      "board": <SoundBoard configuration={boardConfig} />,
       "samples": <SampleManager samples={userSamples} setter={setUserSamples} />,
+      "config_board": <ConfigBoard configuration={boardConfig} />
     }
 
     return displays[state] || <></>
