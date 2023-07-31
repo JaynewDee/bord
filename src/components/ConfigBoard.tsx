@@ -9,7 +9,7 @@ import "./config-board.css"
 ///////
 
 interface ConfigProps {
-    configuration: BoardConfig;
+    configuration: BoardConfig | undefined;
     userSamples: any,
     setUserSamples: Dispatch<SetStateAction<any>>;
 }

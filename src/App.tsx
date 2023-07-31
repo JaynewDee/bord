@@ -22,7 +22,7 @@ function App() {
 
   const [displayState, setDisplayState] = useState("board");
 
-  const [boardConfig, setBoardConfig] = useState<BoardConfig | undefined>();
+  const [boardConfig, setBoardConfig] = useState<BoardConfig>();
 
   ///////
   useEffect(() => {

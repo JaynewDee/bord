@@ -6,8 +6,9 @@ import "./sound-board.css";
 // Make sounds
 ///////
 
+const play = (filename: string) => Invoker.playSample(filename);
 
-const SoundBoard = ({ configuration, theme }: { configuration: BoardConfig, theme: string }) => {
+function SoundBoard({ configuration, theme }: { configuration: BoardConfig, theme: string }) {
     const [boardState, setBoardState] = useState<any>()
 
     useEffect(() => {
@@ -21,10 +22,10 @@ const SoundBoard = ({ configuration, theme }: { configuration: BoardConfig, them
             // @ts-ignore
             state.push(pads[pad])
         }
+
         setBoardState(state)
     }, [])
 
-    console.log(boardState)
     return (
         <div className={`soundboard-${theme}`}>
             {boardState && boardState.length && boardState.map((pad: Pad, idx: number) => theme === "main" ? <SamplePad data={pad} idx={idx} /> : <ConfigPad data={pad} idx={idx} />)}
@@ -34,15 +35,25 @@ const SoundBoard = ({ configuration, theme }: { configuration: BoardConfig, them
 
 const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
     return <div className="sample-pad" key={idx}>
-        <button onClick={Invoker.playBeep}>{data.name}</button>
+        <button onClick={() => play(data.sample!.filename)}>{data.name}</button>
     </div>
 }
 
 const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
     const [displayDetails, setDisplayDetails] = useState(false)
-    return <div className="sample-pad" key={idx} onMouseEnter={() => setDisplayDetails(true)} onMouseLeave={() => setDisplayDetails(false)}>
-        <button onClick={Invoker.playBeep}>{displayDetails && data.name}</button>
-    </div>
+    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+
+    const handleMouseEnter = (e: any) => {
+        const { clientX, clientY } = e;
+        setTooltipPosition({ x: clientX, y: clientY })
+        setDisplayDetails(true)
+    }
+    return <>
+        <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={() => setDisplayDetails(false)}>
+            <button onClick={() => play(data.sample!.filename)}></button>
+            <span className="config-pad-details" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>{displayDetails && data.name}</span>
+        </div>
+    </>
 }
 
 export default SoundBoard

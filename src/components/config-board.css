@@ -1,9 +1,11 @@
 .config-page {
     padding: 1rem;
 }
-.config-page > h3 {
+
+.config-page>h3 {
     text-align: center;
 }
+
 .board-configuration {
     display: flex;
     margin: 5rem 1rem;
@@ -18,21 +20,30 @@
     width: 300px;
 }
 
-.soundboard-configure > .sample-pad>* {
+.soundboard-configure>.sample-pad>* {
     height: 5rem;
     width: 5rem;
+    margin: auto;
+}
+
+.config-pad-details {
+    display: inline-block;
+    position: absolute;
 }
 
 .sample-list-configure {
     justify-content: flex-start;
     width: 33%;
 }
-.sample-list-configure > * {
+
+.sample-list-configure>* {
     margin: 0;
 }
+
 .sample-list-configure .sample-name {
     margin-left: 0;
 }
+
 .sample-list-configure .delete-sample-btn,
 .sample-list-configure .sample-duration {
     display: none;
