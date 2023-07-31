@@ -66,10 +66,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 800,
+        "height": 500,
         "resizable": true,
         "title": "bord",
-        "width": 1000,
+        "width": 800,
         "fileDropEnabled": true 
       }
     ]

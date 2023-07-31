@@ -1,5 +1,5 @@
 import { useRef, Dispatch, SetStateAction, MouseEvent } from 'react';
-import Invoker from '../ffi/invoke';
+import { Invoker } from '../ffi/invoke';
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
@@ -35,10 +35,12 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
 }
 
 export function Samples({ userSamples, setUserSamples }: SamplesProps) {
+    const { list } = userSamples;
+
     return (
         <div className="sample-list">
             {
-                userSamples && userSamples.length ? userSamples.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
+                list && list.length ? list.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
             }
         </div>
     )

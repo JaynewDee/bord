@@ -3,20 +3,22 @@ import { useState, useEffect } from "react";
 import SoundBoard from "./components/SoundBoard";
 import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
-import Invoker from "./ffi/invoke";
+import { Invoker, BoardConfig, SamplesList } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
 
-type Sample = {
-  name: string,
-  assignment: string
-  filename: string,
-  duration: number
+const defaultList: SamplesList = {
+  list: [
+    {
+      name: "beep",
+      filename: "",
+      duration: 0,
+      board_position: 5
+    }
+  ]
 }
 
-export type BoardConfig = Sample[]
-
 function App() {
-  const [userSamples, setUserSamples] = useState<string[]>([])
+  const [userSamples, setUserSamples] = useState<SamplesList>(defaultList)
 
   const [displayState, setDisplayState] = useState("board");
 
@@ -26,7 +28,8 @@ function App() {
 
   useEffect(() => {
     Invoker.initialize().then(([samples, config]) => {
-      setUserSamples(samples.list);
+      console.log(samples)
+      setUserSamples(samples);
       setBoardConfig(config)
     })
   }, [])
@@ -35,7 +38,7 @@ function App() {
     const displays: { [key: string]: JSX.Element } = {
       "board": <SoundBoard configuration={boardConfig} />,
       "samples": <SampleManager samples={userSamples} setter={setUserSamples} />,
-      "config_board": <ConfigBoard configuration={boardConfig} />
+      "board_config": <ConfigBoard configuration={boardConfig} />
     }
 
     return displays[state] || <></>

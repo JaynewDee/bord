@@ -136,11 +136,6 @@ impl AudioInterface {
     }
 
     pub fn play_from_file(filepath: &std::path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
-        for _ in 0..50 {
-            print!("=")
-        }
-        print!("\n");
-
         let start = time::Instant::now();
 
         let sl = Soloud::default()?;
@@ -157,8 +152,8 @@ impl AudioInterface {
 
         let elapsed = time::Instant::now() - start;
 
-        println!("Elapsed duration: {:?}", &elapsed);
         println!("End of 'play_from_file' ");
+        println!("Elapsed duration: {:?}", &elapsed);
 
         Ok(())
     }

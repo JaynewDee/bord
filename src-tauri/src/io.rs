@@ -1,4 +1,3 @@
-// write audio to new file at temp destination
 use std::{
     fs::{DirEntry, File, OpenOptions},
     io::{Read, Seek, Write},
@@ -8,15 +7,8 @@ use std::{
 use crate::audio::SamplesList;
 
 use super::audio::{AudioInterface, BoardConfig};
-use serde::{Deserialize, Serialize};
 
 pub struct SampleHandler;
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct SampleMessage {
-    id: u32,
-    path: String,
-}
 
 trait PathManager<P: AsRef<Path> + ?Sized> {
     fn carve(dir: &P) -> ();
@@ -117,9 +109,9 @@ impl SampleHandler {
         Vec::with_capacity(file_size as usize)
     }
 
-    pub fn save_sample(message: SampleMessage) -> Result<String, anyhow::Error> {
-        let mut file = File::open(&message.path).unwrap();
-        let destination = Self::sample_destination(&message.path);
+    pub fn save_sample(path: &str) -> Result<String, anyhow::Error> {
+        let mut file = File::open(path).unwrap();
+        let destination = Self::sample_destination(path);
         let mut buffer = Self::sample_buffer(&file);
         file.read_to_end(&mut buffer).unwrap();
 

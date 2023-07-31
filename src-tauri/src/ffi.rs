@@ -1,6 +1,12 @@
+use super::io::SampleHandler;
 use crate::audio::{AudioInterface, BoardConfig, SamplesList};
+use serde::{Deserialize, Serialize};
 
-use super::io::{SampleHandler, SampleMessage};
+#[derive(Deserialize, Serialize, Debug)]
+pub struct SaveSampleMessage {
+    id: u32,
+    path: String,
+}
 
 #[tauri::command]
 pub fn greet(name: &str) -> String {
@@ -16,8 +22,8 @@ pub fn default_sound(msg: &str) {
 }
 
 #[tauri::command]
-pub fn upload_sample(message: SampleMessage) -> bool {
-    if let Ok(result) = SampleHandler::save_sample(message) {
+pub fn upload_sample(message: SaveSampleMessage) -> bool {
+    if let Ok(result) = SampleHandler::save_sample(&message.path) {
         true
     } else {
         false
@@ -40,3 +46,5 @@ pub fn delete_sample(name: &str) -> SamplesList {
 pub fn board_config() -> BoardConfig {
     SampleHandler::read_board_config()
 }
+
+mod transfer {}

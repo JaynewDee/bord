@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import Invoker from "../ffi/invoke";
+import { Invoker } from "../ffi/invoke";
 import { listen } from '@tauri-apps/api/event';
 
 export type AudioFileUploadMessage = {
@@ -21,7 +21,6 @@ function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
         <div className="file-drop-zone">
             DROP MP3 SAMPLES ONTO THE WINDOW TO ADD THEM
         </div>
-
     )
 }
 
@@ -41,8 +40,12 @@ function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
             path: e.payload[0]
         }
 
-        const saveResult = await Invoker.uploadSample(transferEntity);
+        const saveSuccess = await Invoker.uploadSample(transferEntity);
 
-        Invoker.samplesList().then(samples => setter(samples))
+        if (saveSuccess) {
+            Invoker.samplesList().then(samples => setter(samples))
+        } else {
+
+        }
     })
 }
