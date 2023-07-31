@@ -1,5 +1,5 @@
 .sample-list {
-    max-width: 34rem;
+    max-width: 66%;
     margin: 3rem auto;
 }
 
@@ -10,8 +10,21 @@
     margin: 1rem auto;
 }
 
+.sample-list-item[data-play-state=true] {
+}
+
+.animate-bar {
+    background-color: black;
+    height: 3px;
+    width: 0px;
+    z-index: 3;
+}
+
 .sample-name {
-    margin: auto 1rem;
+    display: flex;
+    justify-content: flex-start;
+    margin: auto auto auto 3rem;
+    text-align: left;
 }
 
 .sample-list-item:hover > .sample-name {
@@ -21,6 +34,11 @@
 
 .delete-sample-btn {
      cursor: pointer;
+     width: 1rem;
+}
+
+.delete-sample-btn:hover {
+     color: red;
 }
 
 .file-drop-zone {
@@ -30,3 +48,12 @@
   text-align: center;
 }
 
+@keyframes play-sample {
+    0% {
+        width: 0%;
+    }
+
+    100% {
+        width: 100%;
+    }
+}

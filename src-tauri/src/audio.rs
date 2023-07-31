@@ -19,10 +19,19 @@ pub struct Sample {
     pub name: String,
     pub filename: String,
     pub duration: f64,
-    pub board_position: Option<usize>,
 }
 
-impl Sample {}
+enum Pad {
+    One { sample: Sample },
+    Two,
+    Three,
+    Four,
+    Main,
+    Six,
+    Seven,
+    Eight,
+    Nine,
+}
 
 #[derive(Serialize, Deserialize)]
 pub struct SamplesList {
@@ -57,7 +66,6 @@ impl From<DirEntry> for Sample {
                         filename: file_name_str.to_owned(),
                         // Probably shouldn't open every file just for duration.  Should record duration on save?
                         duration: Self::duration(&File::open(path).unwrap()),
-                        board_position: None,
                     };
                     return sample;
                 }

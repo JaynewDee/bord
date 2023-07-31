@@ -15,7 +15,6 @@ enum Command {
 export type Sample = {
     name: string,
     filename: string,
-    board_position: number,
     duration: number
 }
 

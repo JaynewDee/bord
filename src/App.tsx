@@ -12,7 +12,6 @@ const defaultList: SamplesList = {
       name: "beep",
       filename: "",
       duration: 0,
-      board_position: 5
     }
   ]
 }
@@ -28,7 +27,6 @@ function App() {
 
   useEffect(() => {
     Invoker.initialize().then(([samples, config]) => {
-      console.log(samples)
       setUserSamples(samples);
       setBoardConfig(config)
     })

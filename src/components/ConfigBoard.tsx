@@ -7,10 +7,7 @@ import { BoardConfig } from '../ffi/invoke'
 
 
 export default function ConfigBoard({ configuration }: { configuration: BoardConfig | undefined }) {
-
-    console.log(configuration)
-
     return (
-        <div>ConfigBoard</div>
+        <h3>BOARD CONFIGURATION</h3>
     )
 }

@@ -66,7 +66,7 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 500,
+        "height": 666,
         "resizable": true,
         "title": "bord",
         "width": 800,
