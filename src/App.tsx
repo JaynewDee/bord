@@ -41,6 +41,7 @@ function App() {
     })
   }, [])
 
+
   const displaySwitch = (state: string) => {
     const displays: { [key: string]: JSX.Element } = {
       "board": <SoundBoard configuration={boardConfig} theme="main" />,

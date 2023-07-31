@@ -11,7 +11,15 @@ use std::{
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct BoardConfig {
-    pub samples: Vec<Sample>,
+    pub pads: Pads,
+}
+
+impl Default for BoardConfig {
+    fn default() -> Self {
+        Self {
+            pads: Pads::default(),
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -21,16 +29,48 @@ pub struct Sample {
     pub duration: f64,
 }
 
-enum Pad {
-    One { sample: Sample },
-    Two,
-    Three,
-    Four,
-    Main,
-    Six,
-    Seven,
-    Eight,
-    Nine,
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Pad {
+    name: String,
+    sample: Option<Sample>,
+}
+
+impl Default for Pad {
+    fn default() -> Self {
+        Self {
+            name: "Unassigned".to_string(),
+            sample: None,
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Pads {
+    a_1: Pad,
+    a_2: Pad,
+    a_3: Pad,
+    b_1: Pad,
+    b_2: Pad,
+    b_3: Pad,
+    c_1: Pad,
+    c_2: Pad,
+    c_3: Pad,
+}
+
+impl Default for Pads {
+    fn default() -> Self {
+        Self {
+            a_1: Pad::default(),
+            a_2: Pad::default(),
+            a_3: Pad::default(),
+            b_1: Pad::default(),
+            b_2: Pad::default(),
+            b_3: Pad::default(),
+            c_1: Pad::default(),
+            c_2: Pad::default(),
+            c_3: Pad::default(),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -48,6 +88,7 @@ impl From<Vec<DirEntry>> for SamplesList {
         Self { list: samps }
     }
 }
+
 impl SamplesList {
     pub fn new(samples: Vec<Sample>) -> Self {
         Self { list: samples }

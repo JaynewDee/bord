@@ -24,7 +24,24 @@ export type SamplesList = {
 }
 
 export type BoardConfig = {
-    samples: Sample[],
+    pads: Pads,
+}
+
+export type Pad = {
+    name: string,
+    sample: Sample | undefined
+}
+
+export type Pads = {
+    a1: Pad,
+    a2: Pad,
+    a3: Pad,
+    b1: Pad,
+    b2: Pad,
+    b3: Pad,
+    c1: Pad,
+    c2: Pad,
+    c3: Pad
 }
 
 export class Invoker {
@@ -53,6 +70,7 @@ export class Invoker {
     static updateConfig = async (pad_num: number, sample: Sample): Promise<BoardConfig> => {
         return await invoke(Command.UpdateConfig, { pad_num, sample })
     }
+
     static deleteSample = async (name: string): Promise<SamplesList> => {
         return await invoke(Command.DeleteSample, { name })
     }

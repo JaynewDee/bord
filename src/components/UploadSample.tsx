@@ -44,8 +44,6 @@ function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
 
         if (saveSuccess) {
             Invoker.samplesList().then(samples => setter(samples))
-        } else {
-
         }
     })
 }

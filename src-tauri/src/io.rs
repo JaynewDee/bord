@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::audio::SamplesList;
+use crate::audio::{Pads, SamplesList};
 
 use super::audio::{AudioInterface, BoardConfig};
 
@@ -167,7 +167,11 @@ impl SampleHandler {
             .create(true)
             .open(&config_path);
 
-        if let Ok(creation) = file {
+        let template = serde_json::to_string(&BoardConfig::default()).unwrap();
+
+        if let Ok(mut creation) = file {
+            creation.write_all(template.as_bytes()).unwrap();
+
             println!(
                 "Successfully initialized board configuration @ {:#?}",
                 &config_path
@@ -195,12 +199,17 @@ impl SampleHandler {
             config.read_to_string(&mut data).unwrap();
 
             if let Ok(config) = serde_json::from_str(&data) {
+                println!("{:#?}", &config);
                 config
             } else {
-                BoardConfig { samples: vec![] }
+                BoardConfig {
+                    pads: Pads::default(),
+                }
             }
         } else {
-            BoardConfig { samples: vec![] }
+            BoardConfig {
+                pads: Pads::default(),
+            }
         }
     }
 

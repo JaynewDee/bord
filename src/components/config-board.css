@@ -1,9 +1,12 @@
+.config-page {
+    padding: 1rem;
+}
 .config-page > h3 {
     text-align: center;
 }
 .board-configuration {
     display: flex;
-    margin: 8rem 1rem;
+    margin: 5rem 1rem;
 }
 
 .soundboard-configure {
@@ -26,6 +29,9 @@
 }
 .sample-list-configure > * {
     margin: 0;
+}
+.sample-list-configure .sample-name {
+    margin-left: 0;
 }
 .sample-list-configure .delete-sample-btn,
 .sample-list-configure .sample-duration {

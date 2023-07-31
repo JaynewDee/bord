@@ -10,8 +10,6 @@ export interface SamplesProps {
     theme: string
 }
 
-// TODO
-// Track play progress using duration
 function Sample({ s, setSamples }: { s: any, setSamples: any }) {
     const [playState, setPlayState] = useState(false);
 
@@ -27,16 +25,11 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
 
 
     const handlePlaySample = async () => {
-        const curr = sampleRef.current as any;
-        emit("play_sample", curr.textContent)
+        const current = sampleRef.current as any;
 
-        setPlayState(true)
-        playAnimation(sampleRef);
+        emit("play_sample", current.textContent)
 
-        setTimeout(() => {
-            setPlayState(false);
-            curr.parentElement.previousSibling.style.animation = `none`
-        }, s.duration * 1000);
+        playAnimation(sampleRef, setPlayState);
     }
 
     return (
@@ -51,9 +44,18 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
     )
 }
 
-function playAnimation(ref: MutableRefObject<null>) {
+function playAnimation(ref: MutableRefObject<null>, stateSetter: Dispatch<SetStateAction<boolean>>) {
+    stateSetter(true)
     const el = ref.current as any;
-    el.parentElement.previousSibling.style.animation = `play-sample ${parseFloat(el.getAttribute("data-duration"))}s ease-in`
+    const duration = parseFloat(el.getAttribute("data-duration"));
+
+    el.parentElement.previousSibling.style.animation = `play-sample ${duration}s ease-in`
+
+    setTimeout(() => {
+        stateSetter(false);
+        el.parentElement.previousSibling.style.animation = `none`
+    }, duration * 1000);
+
 }
 
 export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {

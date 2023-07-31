@@ -8,6 +8,12 @@ pub struct SaveSampleMessage {
     path: String,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct PadAssignMessage {
+    sample_path: String,
+    pad_assignment: usize,
+}
+
 #[tauri::command]
 pub fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
