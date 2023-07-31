@@ -12,22 +12,37 @@ enum Command {
     PlaySample = "play_sample"
 }
 
+type Sample = {
+    name: string,
+    filename: string,
+    board_position: number,
+    duration: number
+}
+
 export default class Invoker {
+    static initialize = async () => {
+        const samples = await this.samplesList();
+        const config = await this.boardConfig();
+
+        return [samples, config]
+    }
+
     static playBeep = async () =>
         await invoke(Command.Default, { msg: defaultMsg(Command.Default) })
 
-    static uploadSample = async (message: AudioFileUploadMessage) => {
-        await invoke(Command.Upload, { message })
+    static uploadSample = async (message: AudioFileUploadMessage): Promise<boolean> => {
+        return await invoke(Command.Upload, { message })
     }
 
     static samplesList = async (): Promise<[{ duration: number, name: string }]> => {
         return await invoke(Command.AllSamples)
     }
 
-    static boardConfig = async (): Promise<any> => {
+    static boardConfig = async (): Promise<Sample[]> => {
         return await invoke(Command.BoardConfig)
     }
-    static deleteSample = async (name: string) => {
+
+    static deleteSample = async (name: string): Promise<Sample[]> => {
         return await invoke(Command.DeleteSample, { name })
     }
 

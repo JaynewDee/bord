@@ -41,7 +41,8 @@ function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
             path: e.payload[0]
         }
 
-        await Invoker.uploadSample(transferEntity)
+        const saveResult = await Invoker.uploadSample(transferEntity);
+
         Invoker.samplesList().then(samples => setter(samples))
     })
 }

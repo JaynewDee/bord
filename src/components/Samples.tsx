@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react';
+import { useRef, Dispatch, SetStateAction, MouseEvent } from 'react';
 import Invoker from '../ffi/invoke';
 
 import "./samples.css"
@@ -12,7 +12,7 @@ interface SamplesProps {
 function Sample({ s, setSamples }: { s: any, setSamples: any }) {
     const sampleRef = useRef(null);
 
-    const handleDelete = async (e: any) => {
+    const handleDelete = async (_: MouseEvent<HTMLSpanElement>) => {
         const curr = sampleRef.current as any;
 
         const remaining = await Invoker.deleteSample(curr.textContent);
@@ -28,19 +28,20 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
     return (
         <div className="sample-list-item">
             <span className="delete-sample-btn" onClick={handleDelete}>X</span>
-            <p onClick={handlePlaySample} ref={sampleRef}>{s.name}</p>
+            <p className="sample-name" onClick={handlePlaySample} ref={sampleRef}>{s.name}</p>
+            <span className="sample-duration"> {formatDuration(s.duration)} </span>
         </div>
     )
 }
 
 export function Samples({ userSamples, setUserSamples }: SamplesProps) {
     return (
-        <div>
-            <div className="sample-list">
-                {
-                    userSamples ? userSamples.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
-                }
-            </div>
+        <div className="sample-list">
+            {
+                userSamples && userSamples.length ? userSamples.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
+            }
         </div>
     )
 }
+
+const formatDuration = (duration: number) => duration.toFixed(2) + " s"

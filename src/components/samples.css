@@ -1,22 +1,26 @@
 .sample-list {
+    max-width: 34rem;
+    margin: 3rem auto;
 }
 
 .sample-list-item {
     display: flex;
-    width: 33%;
-    justify-content: center;
+     justify-content: space-between;
     align-items: center;
     margin: 1rem auto;
 }
 
-.sample-list-item:hover {
+.sample-name {
+    margin: auto 1rem;
+}
+
+.sample-list-item:hover > .sample-name {
     color: rgba(200, 230, 240, .9);
     cursor: pointer;
 }
 
 .delete-sample-btn {
-    margin-right: 1rem;
-    cursor: pointer;
+     cursor: pointer;
 }
 
 .file-drop-zone {

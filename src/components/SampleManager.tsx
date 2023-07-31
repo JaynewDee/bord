@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { UploadSampleForm } from './UploadSample'
 import { Samples } from "./Samples";
+import "./sample-manager.css";
 
 ///////
 // Add or Remove samples
@@ -12,8 +13,9 @@ interface ManagerProps {
 }
 
 const SampleManager = ({ samples, setter }: ManagerProps) => {
+    console.log(samples)
     return (
-        <div>
+        <div className="sample-manager">
             <UploadSampleForm setUserSamples={setter} />
             <Samples userSamples={samples} setUserSamples={setter} />
         </div>

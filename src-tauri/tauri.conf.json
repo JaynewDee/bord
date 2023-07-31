@@ -3,7 +3,8 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
-    "withGlobalTauri": false
+    "withGlobalTauri": false,
+    "distDir": ""
   },
   "package": {
     "productName": "bord",

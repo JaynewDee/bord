@@ -6,6 +6,9 @@ import { BoardConfig } from '../App'
 ///////
 
 export default function ConfigBoard({ configuration }: { configuration: BoardConfig | undefined }) {
+
+    console.log(configuration)
+
     return (
         <div>ConfigBoard</div>
     )

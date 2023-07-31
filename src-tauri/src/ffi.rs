@@ -16,8 +16,12 @@ pub fn default_sound(msg: &str) {
 }
 
 #[tauri::command]
-pub fn upload_sample(message: SampleMessage) {
-    SampleHandler::save_sample(message);
+pub fn upload_sample(message: SampleMessage) -> bool {
+    if let Ok(result) = SampleHandler::save_sample(message) {
+        true
+    } else {
+        false
+    }
 }
 
 #[tauri::command]

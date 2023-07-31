@@ -116,7 +116,8 @@ impl SampleHandler {
 
         Vec::with_capacity(file_size as usize)
     }
-    pub fn save_sample(message: SampleMessage) {
+
+    pub fn save_sample(message: SampleMessage) -> Result<String, anyhow::Error> {
         let mut file = File::open(&message.path).unwrap();
         let destination = Self::sample_destination(&message.path);
         let mut buffer = Self::sample_buffer(&file);
@@ -124,7 +125,9 @@ impl SampleHandler {
 
         let mut output_file = File::create(&destination).unwrap();
 
-        let _ = output_file.write_all(&buffer);
+        output_file.write_all(&buffer)?;
+
+        Ok("Sample saved to user's collection.".to_string())
     }
 
     pub fn delete_one(name: &str) {
@@ -167,7 +170,6 @@ impl SampleHandler {
 
         config_path.push("board_config.json");
 
-        println!("{:#?}", &config_path);
         let file = OpenOptions::new()
             .write(true)
             .create(true)
