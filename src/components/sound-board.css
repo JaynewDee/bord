@@ -5,9 +5,9 @@
     margin: auto;
     height: 500px;
     width: 500px;
-    border-radius: 50%;
     padding: 3rem;
 }
+
 
 .soundboard-main>div {
     display: flex;
@@ -17,7 +17,6 @@
 .sample-pad>* {
     height: 8rem;
     width: 8rem;
-    border-radius: 50%;
     cursor: pointer;
 }
 

@@ -1,5 +1,6 @@
-import React from 'react'
 import { BoardConfig } from '../ffi/invoke'
+import SoundBoard from './SoundBoard'
+import "./config-board.css"
 
 ///////
 // Manage 'Pad' assignments
@@ -8,6 +9,9 @@ import { BoardConfig } from '../ffi/invoke'
 
 export default function ConfigBoard({ configuration }: { configuration: BoardConfig | undefined }) {
     return (
-        <h3>BOARD CONFIGURATION</h3>
+        <article>
+            <h3>BOARD CONFIGURATION</h3>
+            <SoundBoard configuration={configuration} theme="configure" />
+        </article>
     )
 }

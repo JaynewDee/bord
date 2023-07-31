@@ -5,9 +5,9 @@ import "./sound-board.css";
 // Make sounds
 ///////
 
-const SoundBoard = ({ configuration }: { configuration: BoardConfig | undefined }) => {
+const SoundBoard = ({ configuration, theme }: { configuration: BoardConfig | undefined, theme: string }) => {
     return (
-        <div className="soundboard-main">
+        <div className={`soundboard-${theme}`}>
             <div className="sample-pad">
                 <button onClick={Invoker.playBeep}></button>
             </div>

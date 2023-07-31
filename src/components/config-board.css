@@ -1,0 +1,13 @@
+.soundboard-configure {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    margin: auto 3rem auto auto;
+    height: 300px;
+    width: 300px;
+}
+
+.soundboard-configure > .sample-pad>* {
+    height: 5rem;
+    width: 5rem;
+}

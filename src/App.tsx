@@ -34,7 +34,7 @@ function App() {
 
   const displaySwitch = (state: string) => {
     const displays: { [key: string]: JSX.Element } = {
-      "board": <SoundBoard configuration={boardConfig} />,
+      "board": <SoundBoard configuration={boardConfig} theme="main" />,
       "samples": <SampleManager samples={userSamples} setter={setUserSamples} />,
       "board_config": <ConfigBoard configuration={boardConfig} />
     }

@@ -8,6 +8,7 @@ enum Command {
     Upload = "upload_sample",
     AllSamples = "samples_list",
     BoardConfig = "board_config",
+    UpdateConfig = "update_config",
     DeleteSample = "delete_sample",
     PlaySample = "play_sample"
 }
@@ -39,7 +40,6 @@ export class Invoker {
 
     static uploadSample = async (message: AudioFileUploadMessage): Promise<boolean> => {
         return await invoke(Command.Upload, { message })
-
     }
 
     static samplesList = async (): Promise<SamplesList> => {
@@ -50,6 +50,9 @@ export class Invoker {
         return await invoke(Command.BoardConfig)
     }
 
+    static updateConfig = async (pad_num: number, sample: Sample): Promise<BoardConfig> => {
+        return await invoke(Command.UpdateConfig, { pad_num, sample })
+    }
     static deleteSample = async (name: string): Promise<SamplesList> => {
         return await invoke(Command.DeleteSample, { name })
     }
