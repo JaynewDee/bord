@@ -1,6 +1,5 @@
-use crate::audio::BoardConfig;
+use crate::audio::{AudioInterface, BoardConfig, SamplesList};
 
-use super::audio::{play_beep, Sample};
 use super::io::{SampleHandler, SampleMessage};
 
 #[tauri::command]
@@ -13,7 +12,7 @@ pub fn default_sound(msg: &str) {
     println!("Received message from front end ::: {}", msg);
     // Play sound
 
-    let _ = play_beep();
+    let _ = AudioInterface::play_beep();
 }
 
 #[tauri::command]
@@ -22,23 +21,15 @@ pub fn upload_sample(message: SampleMessage) {
 }
 
 #[tauri::command]
-pub fn samples_list() -> Vec<Sample> {
-    let all_samples = SampleHandler::get_all_entries();
-
-    all_samples.iter().for_each(|s| {
-        let _ = SampleHandler::metadata(&s.name);
-    });
-
-    all_samples
+pub fn samples_list() -> SamplesList {
+    SampleHandler::sample_entries()
 }
 
 #[tauri::command]
-pub fn delete_sample(name: &str) -> Vec<Sample> {
+pub fn delete_sample(name: &str) -> SamplesList {
     SampleHandler::delete_one(name);
 
-    let all_samples = SampleHandler::get_all_entries();
-
-    all_samples
+    SampleHandler::sample_entries()
 }
 
 #[tauri::command]

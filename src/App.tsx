@@ -25,7 +25,7 @@ function App() {
   ///////
 
   useEffect(() => {
-    Invoker.samplesList().then((samples: any) => setUserSamples(samples))
+    Invoker.samplesList().then((samples: any) => setUserSamples(samples.list))
     Invoker.boardConfig().then((config: any) => config && setBoardConfig(config)).then(() => console.log(boardConfig))
   }, [])
 

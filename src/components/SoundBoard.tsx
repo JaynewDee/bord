@@ -3,8 +3,10 @@ import Invoker from "../ffi/invoke";
 import "./sound-board.css";
 
 ///////
+// Make sounds
+///////
 
-const SoundBoard = ({ configuration }: { configuration: BoardConfig }) => {
+const SoundBoard = ({ configuration }: { configuration: BoardConfig | undefined }) => {
     console.log(configuration)
 
     return (
