@@ -70,7 +70,8 @@
         "resizable": true,
         "title": "bord",
         "width": 800,
-        "fileDropEnabled": true 
+        "fileDropEnabled": true,
+        "decorations": false 
       }
     ]
   }

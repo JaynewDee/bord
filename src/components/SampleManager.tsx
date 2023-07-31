@@ -16,7 +16,7 @@ const SampleManager = ({ samples, setter }: ManagerProps) => {
     return (
         <div className="sample-manager">
             <UploadSampleForm setUserSamples={setter} />
-            <Samples userSamples={samples} setUserSamples={setter} />
+            <Samples userSamples={samples} setUserSamples={setter} theme="manager" />
         </div>
     )
 }

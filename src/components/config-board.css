@@ -1,3 +1,11 @@
+.config-page > h3 {
+    text-align: center;
+}
+.board-configuration {
+    display: flex;
+    margin: 8rem 1rem;
+}
+
 .soundboard-configure {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -10,4 +18,16 @@
 .soundboard-configure > .sample-pad>* {
     height: 5rem;
     width: 5rem;
+}
+
+.sample-list-configure {
+    justify-content: flex-start;
+    width: 33%;
+}
+.sample-list-configure > * {
+    margin: 0;
+}
+.sample-list-configure .delete-sample-btn,
+.sample-list-configure .sample-duration {
+    display: none;
 }
