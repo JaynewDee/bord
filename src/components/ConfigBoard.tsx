@@ -1,4 +1,4 @@
-import { BoardConfig, GenericSetter, SamplesList } from '../ffi/invoke'
+import { AllSamples, BoardConfig, GenericSetter, SamplesList } from '../ffi/invoke'
 import { Samples } from './Samples'
 import SoundBoard from './SoundBoard'
 import "./config-board.css"
@@ -7,11 +7,11 @@ import "./config-board.css"
 // Manage 'Pad' assignments
 ///////
 
-type SamplesSetter = GenericSetter<SamplesList>
+type SamplesSetter = GenericSetter<AllSamples>
 
 interface ConfigProps {
     configuration?: BoardConfig;
-    userSamples: SamplesList,
+    userSamples: AllSamples,
     setUserSamples: SamplesSetter;
 }
 

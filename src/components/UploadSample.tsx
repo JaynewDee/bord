@@ -1,7 +1,6 @@
 import { Invoker, GenericSetter, SamplesList, DropEvent, AudioFileUploadMessage } from "../ffi/invoke";
 import { listen } from '@tauri-apps/api/event';
-
-type SamplesSetter = GenericSetter<SamplesList>;
+import { SamplesSetter } from "./Samples";
 
 function DropZone({ setUserSamples }: { setUserSamples: SamplesSetter }) {
     useFileDrop(setUserSamples);

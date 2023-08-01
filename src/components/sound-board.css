@@ -20,6 +20,10 @@
     cursor: pointer;
 }
 
+.sample-pad > button {
+    border: 2px solid rgba(0, 59, 126, .7);
+}
+
 .soundboard-main>div:nth-child(1) {
     justify-content: flex-end;
     align-items: flex-end;

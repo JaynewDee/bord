@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Invoker, BoardConfig, Pad } from "../ffi/invoke";
 import "./sound-board.css";
+import useMouseEnterTooltip from "../hooks/useTooltip";
+import useBoardState from "../hooks/useBoardState";
 
 ///////
 // Make sounds
@@ -8,7 +10,6 @@ import "./sound-board.css";
 
 const play = (filename: string) => Invoker.playSample(filename);
 
-type BoardState = Pad[]
 
 interface BoardProps {
     configuration?: BoardConfig,
@@ -16,22 +17,8 @@ interface BoardProps {
 }
 
 function SoundBoard({ configuration, theme }: BoardProps) {
-    const [boardState, setBoardState] = useState<BoardState>()
 
-    useEffect(() => {
-        if (!configuration) return;
-
-        let state = [];
-
-        const { pads } = configuration;
-
-        for (const pad in pads) {
-            // @ts-ignore
-            state.push(pads[pad])
-        }
-
-        setBoardState(state)
-    }, [])
+    const boardState = useBoardState(configuration);
 
     return (
         <div className={`soundboard-${theme}`}>
@@ -63,9 +50,11 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
         useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
 
     return <>
-        <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button onClick={() => data.sample?.filename && play(data.sample.filename)}></button>
-            <span className="config-pad-details" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>
+        <div className="config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
+            <button onClick={() => data.sample?.filename && play(data.sample.filename)} style={
+                data.name === "Unassigned" ? { border: "1px solid grey" } : { border: "1px solid green" }
+            }></button>
+            <span className="config-pad-details" style={displayDetails ? { left: tooltipPosition.x, top: tooltipPosition.y } : { display: "none" }}>
                 {displayDetails && data.name}
             </span>
         </div>

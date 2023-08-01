@@ -73,12 +73,14 @@ impl Default for Pads {
     }
 }
 
+pub type SamplesList = Vec<Sample>;
+
 #[derive(Serialize, Deserialize)]
-pub struct SamplesList {
-    list: Vec<Sample>,
+pub struct AllSamples {
+    list: SamplesList,
 }
 
-impl From<Vec<DirEntry>> for SamplesList {
+impl From<Vec<DirEntry>> for AllSamples {
     fn from(entries: Vec<DirEntry>) -> Self {
         let samps = entries
             .into_iter()
@@ -89,8 +91,8 @@ impl From<Vec<DirEntry>> for SamplesList {
     }
 }
 
-impl SamplesList {
-    pub fn new(samples: Vec<Sample>) -> Self {
+impl AllSamples {
+    pub fn new(samples: SamplesList) -> Self {
         Self { list: samples }
     }
 }

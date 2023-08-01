@@ -1,13 +1,13 @@
 import { useRef, MouseEvent, useState, MutableRefObject } from 'react';
-import { GenericSetter, Invoker, SampleItem, SamplesList } from '../ffi/invoke';
+import { AllSamples, GenericSetter, Invoker, SampleItem, SamplesList } from '../ffi/invoke';
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
 
-type SamplesSetter = GenericSetter<SamplesList>
+export type SamplesSetter = GenericSetter<AllSamples>
 
 interface SamplesProps {
-    userSamples: SamplesList;
+    userSamples: AllSamples;
     setUserSamples: SamplesSetter;
     theme: string
 }
@@ -66,7 +66,7 @@ function playAnimation(ref: MutableRefObject<null>, stateSetter: AnimationSetter
 }
 
 export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {
-    const { list } = userSamples;
+    const list = userSamples?.list || [];
 
     return (
         <div className={`sample-list-${theme}`}>

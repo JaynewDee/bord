@@ -1,5 +1,5 @@
 use super::io::SampleHandler;
-use crate::audio::{AudioInterface, BoardConfig, SamplesList};
+use crate::audio::{AllSamples, AudioInterface, BoardConfig, SamplesList};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -37,12 +37,12 @@ pub fn upload_sample(message: SaveSampleMessage) -> bool {
 }
 
 #[tauri::command]
-pub fn samples_list() -> SamplesList {
+pub fn samples_list() -> AllSamples {
     SampleHandler::sample_entries()
 }
 
 #[tauri::command]
-pub fn delete_sample(name: &str) -> SamplesList {
+pub fn delete_sample(name: &str) -> AllSamples {
     SampleHandler::delete_one(name);
 
     SampleHandler::sample_entries()

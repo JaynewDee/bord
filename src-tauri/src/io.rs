@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::audio::{Pads, SamplesList};
+use crate::audio::{AllSamples, Pads, SamplesList};
 
 use super::audio::{AudioInterface, BoardConfig};
 
@@ -213,9 +213,9 @@ impl SampleHandler {
         }
     }
 
-    pub fn sample_entries() -> SamplesList {
+    pub fn sample_entries() -> AllSamples {
         let entries = Self::dir_entries();
 
-        SamplesList::from(entries)
+        AllSamples::from(entries)
     }
 }

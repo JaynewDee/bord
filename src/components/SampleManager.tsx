@@ -1,16 +1,14 @@
 import { UploadSampleForm } from './UploadSample'
-import { Samples } from "./Samples";
+import { Samples, SamplesSetter } from "./Samples";
 import "./sample-manager.css";
-import { GenericSetter, SamplesList } from '../ffi/invoke';
+import { AllSamples, SamplesList } from '../ffi/invoke';
 
 ///////
 // Add or Remove samples
 ///////
 
-type SamplesSetter = GenericSetter<SamplesList>;
-
 interface ManagerProps {
-    samples: SamplesList,
+    samples: AllSamples,
     setter: SamplesSetter
 }
 

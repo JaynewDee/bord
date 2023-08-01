@@ -3,12 +3,13 @@ import { useState, useEffect } from "react";
 import SoundBoard from "./components/SoundBoard";
 import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
-import { Invoker, BoardConfig } from "./ffi/invoke";
+import { Invoker, BoardConfig, AllSamples } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
 import useTitlebar from "./hooks/useTitlebar";
+import { AllSamplesDefault } from "./data";
 
 function App() {
-  const [userSamples, setUserSamples] = useState<any>()
+  const [userSamples, setUserSamples] = useState<AllSamples>(AllSamplesDefault)
 
   const [displayState, setDisplayState] = useState("board");
 

@@ -14,7 +14,7 @@ enum Command {
 }
 
 export class Invoker {
-    static initialize = async (): Promise<[SamplesList, BoardConfig]> => {
+    static initialize = async (): Promise<[AllSamples, BoardConfig]> => {
         const samples = await this.samplesList();
         const config = await this.boardConfig();
 
@@ -28,7 +28,7 @@ export class Invoker {
         return await invoke(Command.Upload, { message })
     }
 
-    static samplesList = async (): Promise<SamplesList> => {
+    static samplesList = async (): Promise<AllSamples> => {
         return await invoke(Command.AllSamples)
     }
 
@@ -36,11 +36,11 @@ export class Invoker {
         return await invoke(Command.BoardConfig)
     }
 
-    static updateConfig = async (pad_num: number, sample: SampleItem): Promise<BoardConfig> => {
-        return await invoke(Command.UpdateConfig, { pad_num, sample })
+    static updateConfig = async (padKey: string, sample: SampleItem): Promise<BoardConfig> => {
+        return await invoke(Command.UpdateConfig, { padKey, sample })
     }
 
-    static deleteSample = async (name: string): Promise<SamplesList> => {
+    static deleteSample = async (name: string): Promise<AllSamples> => {
         return await invoke(Command.DeleteSample, { name })
     }
 
@@ -64,8 +64,10 @@ export type SampleItem = {
     duration: number
 }
 
-export type SamplesList = {
-    list: SampleItem[]
+export type SamplesList = SampleItem[]
+
+export type AllSamples = {
+    list: SamplesList
 }
 
 export type BoardConfig = {
