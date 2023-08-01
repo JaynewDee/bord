@@ -8,7 +8,7 @@ import "./sound-board.css";
 
 const play = (filename: string) => Invoker.playSample(filename);
 
-function SoundBoard({ configuration, theme }: { configuration: BoardConfig, theme: string }) {
+function SoundBoard({ configuration, theme }: { configuration: BoardConfig | undefined, theme: string }) {
     const [boardState, setBoardState] = useState<any>()
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function SoundBoard({ configuration, theme }: { configuration: BoardConfig, them
 
 const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
     return <div className="sample-pad" key={idx}>
-        <button onClick={() => play(data.sample!.filename)}>{data.name}</button>
+        <button onClick={() => data.sample?.filename && play(data.sample.filename)}>{data.name}</button>
     </div>
 }
 
@@ -45,9 +45,11 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
 
     const handleMouseEnter = (e: any) => {
         const { clientX, clientY } = e;
+
         setTooltipPosition({ x: clientX, y: clientY })
         setDisplayDetails(true)
     }
+
     return <>
         <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={() => setDisplayDetails(false)}>
             <button onClick={() => play(data.sample!.filename)}></button>

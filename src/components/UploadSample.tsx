@@ -13,9 +13,8 @@ type DropEvent = { event: string, windowLabel: string, payload: string[], id: nu
 
 function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
 
-    useEffect(() => {
-        useFileDrop(setUserSamples);
-    }, [])
+    useFileDrop(setUserSamples);
+
 
     return (
         <div className="file-drop-zone">

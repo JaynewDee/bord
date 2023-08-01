@@ -52,5 +52,3 @@ pub fn delete_sample(name: &str) -> SamplesList {
 pub fn board_config() -> BoardConfig {
     SampleHandler::read_board_config()
 }
-
-mod transfer {}

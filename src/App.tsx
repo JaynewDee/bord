@@ -3,41 +3,25 @@ import { useState, useEffect } from "react";
 import SoundBoard from "./components/SoundBoard";
 import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
-import { Invoker, BoardConfig, SamplesList } from "./ffi/invoke";
+import { Invoker, BoardConfig } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
-import { appWindow } from '@tauri-apps/api/window'
-
-const defaultList: SamplesList = {
-  list: [
-    {
-      name: "beep",
-      filename: "",
-      duration: 0,
-    }
-  ]
-}
+import useTitlebar from "./hooks/useTitlebar";
 
 function App() {
-  const [userSamples, setUserSamples] = useState<SamplesList>(defaultList)
+  const [userSamples, setUserSamples] = useState<any>()
 
   const [displayState, setDisplayState] = useState("board");
 
   const [boardConfig, setBoardConfig] = useState<BoardConfig>();
 
   ///////
-  useEffect(() => {
-    document
-      .getElementById('titlebar-minimize')?.addEventListener('click', () => appWindow.minimize())
-    document
-      .getElementById('titlebar-maximize')?.addEventListener('click', () => appWindow.toggleMaximize())
-    document
-      .getElementById('titlebar-close')?.addEventListener('click', () => appWindow.close())
-  }, [])
+
+  useTitlebar()
 
   useEffect(() => {
     Invoker.initialize().then(([samples, config]) => {
       setUserSamples(samples);
-      setBoardConfig(config)
+      setBoardConfig(config);
     })
   }, [])
 

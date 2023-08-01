@@ -1,5 +1,5 @@
 import { useRef, Dispatch, SetStateAction, MouseEvent, useState, MutableRefObject } from 'react';
-import { Invoker } from '../ffi/invoke';
+import { Invoker, SampleItem } from '../ffi/invoke';
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
@@ -10,7 +10,7 @@ export interface SamplesProps {
     theme: string
 }
 
-function Sample({ s, setSamples }: { s: any, setSamples: any }) {
+function Sample({ s, setSamples }: { s: SampleItem, setSamples: any }) {
     const [playState, setPlayState] = useState(false);
 
     const sampleRef = useRef(null);
@@ -22,7 +22,6 @@ function Sample({ s, setSamples }: { s: any, setSamples: any }) {
 
         setSamples(remaining);
     }
-
 
     const handlePlaySample = async () => {
         const current = sampleRef.current as any;
@@ -55,7 +54,6 @@ function playAnimation(ref: MutableRefObject<null>, stateSetter: Dispatch<SetSta
         stateSetter(false);
         el.parentElement.previousSibling.style.animation = `none`
     }, duration * 1000);
-
 }
 
 export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {
@@ -64,7 +62,7 @@ export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {
     return (
         <div className={`sample-list-${theme}`}>
             {
-                list && list.length ? list.map((s: { duration: number, name: string }) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
+                list && list.length ? list.map((s: SampleItem) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
             }
         </div>
     )

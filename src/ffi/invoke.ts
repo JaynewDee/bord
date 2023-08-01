@@ -13,14 +13,14 @@ enum Command {
     PlaySample = "play_sample"
 }
 
-export type Sample = {
+export type SampleItem = {
     name: string,
     filename: string,
     duration: number
 }
 
 export type SamplesList = {
-    list: Sample[]
+    list: SampleItem[]
 }
 
 export type BoardConfig = {
@@ -29,7 +29,7 @@ export type BoardConfig = {
 
 export type Pad = {
     name: string,
-    sample: Sample | undefined
+    sample: SampleItem | undefined
 }
 
 export type Pads = {
@@ -67,7 +67,7 @@ export class Invoker {
         return await invoke(Command.BoardConfig)
     }
 
-    static updateConfig = async (pad_num: number, sample: Sample): Promise<BoardConfig> => {
+    static updateConfig = async (pad_num: number, sample: SampleItem): Promise<BoardConfig> => {
         return await invoke(Command.UpdateConfig, { pad_num, sample })
     }
 
