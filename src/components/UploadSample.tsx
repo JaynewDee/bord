@@ -1,20 +1,11 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { Invoker } from "../ffi/invoke";
+import { Dispatch, SetStateAction } from "react";
+import { Invoker, GenericSetter, SamplesList, DropEvent, AudioFileUploadMessage } from "../ffi/invoke";
 import { listen } from '@tauri-apps/api/event';
 
-export type AudioFileUploadMessage = {
-    id: number,
-    path: string,
-}
+type SamplesSetter = GenericSetter<SamplesList>;
 
-type Setter = Dispatch<SetStateAction<any>>;
-
-type DropEvent = { event: string, windowLabel: string, payload: string[], id: number };
-
-function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
-
+function DropZone({ setUserSamples }: { setUserSamples: SamplesSetter }) {
     useFileDrop(setUserSamples);
-
 
     return (
         <div className="file-drop-zone">
@@ -23,7 +14,7 @@ function DropZone({ setUserSamples }: { setUserSamples: Setter }) {
     )
 }
 
-export function UploadSampleForm({ setUserSamples }: { setUserSamples: Setter }) {
+export function UploadSampleForm({ setUserSamples }: { setUserSamples: SamplesSetter }) {
     return (
         <div>
             <DropZone setUserSamples={setUserSamples} />
@@ -31,8 +22,7 @@ export function UploadSampleForm({ setUserSamples }: { setUserSamples: Setter })
     )
 }
 
-
-function useFileDrop(setter: Dispatch<SetStateAction<any>>) {
+function useFileDrop(setter: SamplesSetter) {
     const _ = listen("tauri://file-drop", async (e: DropEvent) => {
         const transferEntity: AudioFileUploadMessage = {
             id: e.id,

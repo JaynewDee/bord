@@ -8,8 +8,15 @@ import "./sound-board.css";
 
 const play = (filename: string) => Invoker.playSample(filename);
 
-function SoundBoard({ configuration, theme }: { configuration: BoardConfig | undefined, theme: string }) {
-    const [boardState, setBoardState] = useState<any>()
+type BoardState = Pad[]
+
+interface BoardProps {
+    configuration?: BoardConfig,
+    theme: string
+}
+
+function SoundBoard({ configuration, theme }: BoardProps) {
+    const [boardState, setBoardState] = useState<BoardState>()
 
     useEffect(() => {
         if (!configuration) return;
@@ -28,14 +35,23 @@ function SoundBoard({ configuration, theme }: { configuration: BoardConfig | und
 
     return (
         <div className={`soundboard-${theme}`}>
-            {boardState && boardState.length && boardState.map((pad: Pad, idx: number) => theme === "main" ? <SamplePad data={pad} idx={idx} /> : <ConfigPad data={pad} idx={idx} />)}
+            {boardState && boardState.length && boardState.map(
+                (pad: Pad, idx: number) =>
+                    theme === "main" ?
+                        <SamplePad data={pad} idx={idx} />
+                        : <ConfigPad data={pad} idx={idx} />
+            )}
         </div>
     )
 }
 
 const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
+    const handlePadClick = (_: any) => {
+        data.sample?.filename && play(data.sample.filename)
+    }
+
     return <div className="sample-pad" key={idx}>
-        <button onClick={() => data.sample?.filename && play(data.sample.filename)}>{data.name}</button>
+        <button onClick={handlePadClick}>{data.name}</button>
     </div>
 }
 
@@ -43,15 +59,11 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
     const [displayDetails, setDisplayDetails] = useState(false)
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
-    const handleMouseEnter = (e: any) => {
-        const { clientX, clientY } = e;
-
-        setTooltipPosition({ x: clientX, y: clientY })
-        setDisplayDetails(true)
-    }
+    const [handleMouseEnter, handleMouseLeave] =
+        useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
 
     return <>
-        <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={() => setDisplayDetails(false)}>
+        <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <button onClick={() => play(data.sample!.filename)}></button>
             <span className="config-pad-details" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>{displayDetails && data.name}</span>
         </div>

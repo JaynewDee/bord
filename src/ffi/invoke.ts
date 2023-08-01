@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { AudioFileUploadMessage } from "../components/UploadSample";
+import { Dispatch, SetStateAction } from "react";
 
 const defaultMsg = (cmnd: string) => `Command ${cmnd} invoked by TS`
 
@@ -13,36 +13,6 @@ enum Command {
     PlaySample = "play_sample"
 }
 
-export type SampleItem = {
-    name: string,
-    filename: string,
-    duration: number
-}
-
-export type SamplesList = {
-    list: SampleItem[]
-}
-
-export type BoardConfig = {
-    pads: Pads,
-}
-
-export type Pad = {
-    name: string,
-    sample: SampleItem | undefined
-}
-
-export type Pads = {
-    a1: Pad,
-    a2: Pad,
-    a3: Pad,
-    b1: Pad,
-    b2: Pad,
-    b3: Pad,
-    c1: Pad,
-    c2: Pad,
-    c3: Pad
-}
 
 export class Invoker {
     static initialize = async (): Promise<[SamplesList, BoardConfig]> => {
@@ -78,4 +48,44 @@ export class Invoker {
     static playSample = async (name: string) => {
         await invoke(Command.PlaySample, { name })
     }
+}
+
+export type AudioFileUploadMessage = {
+    id: number,
+    path: string,
+}
+
+export type GenericSetter<T> = Dispatch<SetStateAction<T>>;
+
+export type DropEvent = { event: string, windowLabel: string, payload: string[], id: number };
+
+export type SampleItem = {
+    name: string,
+    filename: string,
+    duration: number
+}
+
+export type SamplesList = {
+    list: SampleItem[]
+}
+
+export type BoardConfig = {
+    pads: Pads,
+}
+
+export type Pad = {
+    name: string,
+    sample: SampleItem | undefined
+}
+
+export type Pads = {
+    a1: Pad,
+    a2: Pad,
+    a3: Pad,
+    b1: Pad,
+    b2: Pad,
+    b3: Pad,
+    c1: Pad,
+    c2: Pad,
+    c3: Pad
 }
