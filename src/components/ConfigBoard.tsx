@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
-import { BoardConfig } from '../ffi/invoke'
+import { BoardConfig, GenericSetter, SamplesList } from '../ffi/invoke'
 import { Samples } from './Samples'
 import SoundBoard from './SoundBoard'
 import "./config-board.css"
@@ -8,10 +7,12 @@ import "./config-board.css"
 // Manage 'Pad' assignments
 ///////
 
+type SamplesSetter = GenericSetter<SamplesList>
+
 interface ConfigProps {
-    configuration: BoardConfig | undefined;
-    userSamples: any,
-    setUserSamples: Dispatch<SetStateAction<any>>;
+    configuration?: BoardConfig;
+    userSamples: SamplesList,
+    setUserSamples: SamplesSetter;
 }
 
 export default function ConfigBoard({ configuration, userSamples, setUserSamples }: ConfigProps) {

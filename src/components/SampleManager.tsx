@@ -1,15 +1,17 @@
-import { Dispatch, SetStateAction } from 'react'
 import { UploadSampleForm } from './UploadSample'
 import { Samples } from "./Samples";
 import "./sample-manager.css";
+import { GenericSetter, SamplesList } from '../ffi/invoke';
 
 ///////
 // Add or Remove samples
 ///////
 
+type SamplesSetter = GenericSetter<SamplesList>;
+
 interface ManagerProps {
-    samples: any,
-    setter: Dispatch<SetStateAction<any>>
+    samples: SamplesList,
+    setter: SamplesSetter
 }
 
 const SampleManager = ({ samples, setter }: ManagerProps) => {

@@ -56,18 +56,20 @@ const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
 }
 
 const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
-    const [displayDetails, setDisplayDetails] = useState(false)
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+    const [displayDetails, setDisplayDetails] = useState(false)
 
     const [handleMouseEnter, handleMouseLeave] =
         useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
 
     return <>
         <div className="sample-pad config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button onClick={() => play(data.sample!.filename)}></button>
-            <span className="config-pad-details" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>{displayDetails && data.name}</span>
+            <button onClick={() => data.sample?.filename && play(data.sample.filename)}></button>
+            <span className="config-pad-details" style={{ left: tooltipPosition.x, top: tooltipPosition.y }}>
+                {displayDetails && data.name}
+            </span>
         </div>
     </>
 }
 
-export default SoundBoard
+export default SoundBoard;

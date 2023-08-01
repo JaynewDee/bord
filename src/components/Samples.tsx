@@ -1,16 +1,23 @@
-import { useRef, Dispatch, SetStateAction, MouseEvent, useState, MutableRefObject } from 'react';
-import { Invoker, SampleItem } from '../ffi/invoke';
+import { useRef, MouseEvent, useState, MutableRefObject } from 'react';
+import { GenericSetter, Invoker, SampleItem, SamplesList } from '../ffi/invoke';
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
 
-export interface SamplesProps {
-    userSamples: any;
-    setUserSamples: Dispatch<SetStateAction<any>>;
+type SamplesSetter = GenericSetter<SamplesList>
+
+interface SamplesProps {
+    userSamples: SamplesList;
+    setUserSamples: SamplesSetter;
     theme: string
 }
 
-function Sample({ s, setSamples }: { s: SampleItem, setSamples: any }) {
+interface SampleProps {
+    s: SampleItem,
+    setSamples: SamplesSetter
+}
+
+function Sample({ s, setSamples }: SampleProps) {
     const [playState, setPlayState] = useState(false);
 
     const sampleRef = useRef(null);
@@ -43,7 +50,9 @@ function Sample({ s, setSamples }: { s: SampleItem, setSamples: any }) {
     )
 }
 
-function playAnimation(ref: MutableRefObject<null>, stateSetter: Dispatch<SetStateAction<boolean>>) {
+type AnimationSetter = GenericSetter<boolean>
+
+function playAnimation(ref: MutableRefObject<null>, stateSetter: AnimationSetter) {
     stateSetter(true)
     const el = ref.current as any;
     const duration = parseFloat(el.getAttribute("data-duration"));

@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction } from 'react'
 import "./main-nav.css";
+import { GenericSetter } from '../ffi/invoke';
 
-const MainNav = (setDisplay: Dispatch<SetStateAction<string>>) => {
+type DisplaySetter = GenericSetter<string>;
+
+const MainNav = (setDisplay: DisplaySetter) => {
 
     const navigate = (display: string) => setDisplay(display)
 

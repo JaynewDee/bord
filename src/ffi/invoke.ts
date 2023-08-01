@@ -13,7 +13,6 @@ enum Command {
     PlaySample = "play_sample"
 }
 
-
 export class Invoker {
     static initialize = async (): Promise<[SamplesList, BoardConfig]> => {
         const samples = await this.samplesList();
