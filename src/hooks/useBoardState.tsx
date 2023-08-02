@@ -20,7 +20,7 @@ export default function useBoardState(configuration: BoardConfig | undefined) {
         }
 
         setBoardState(state)
-    }, [])
+    }, [configuration])
 
     return boardState;
 }

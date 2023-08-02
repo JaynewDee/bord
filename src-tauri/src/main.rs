@@ -3,14 +3,14 @@
     windows_subsystem = "windows"
 )]
 
-use ffi::{board_config, default_sound, delete_sample, greet, samples_list, upload_sample};
+use ffi::{board_config, delete_sample, greet, ping, samples_list, upload_sample};
 use tauri::Manager;
 
 mod audio;
 mod ffi;
 mod io;
 
-const _APP_NAME: &str = "BORD";
+const _APP_NAME: &str = "bord";
 
 fn app_setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     app.listen_global("play_sample", |event| {
@@ -25,10 +25,13 @@ fn app_setup(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
 
 fn main() {
     tauri::Builder::default()
-        .setup(|app| app_setup(app))
+        .setup(|app| {
+            app_setup(app).unwrap();
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             greet,
-            default_sound,
+            ping,
             upload_sample,
             samples_list,
             board_config,

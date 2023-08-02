@@ -26,10 +26,10 @@ function Sample({ s, setSamples }: SampleProps) {
     const handlePlaySample = () => {
         const current = sampleRef.current as HTMLElement | null;
 
-        const sampleName = current?.textContent;
+        console.log(current?.textContent)
 
-        current && sampleName &&
-            emit("play_sample",)
+        current && current.textContent &&
+            emit("play_sample", current.textContent)
 
         playAnimation(sampleRef, setPlayState);
     }

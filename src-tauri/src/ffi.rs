@@ -20,16 +20,20 @@ pub fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-pub fn default_sound(msg: &str) {
-    println!("Received message from front end ::: {}", msg);
-    // Play sound
-
-    let _ = AudioInterface::play_beep();
+pub fn ping(sound: &str) {
+    match sound {
+        "beep" => {
+            let _ = AudioInterface::play_beep();
+        }
+        _ => {
+            let _ = AudioInterface::play_beep();
+        }
+    };
 }
 
 #[tauri::command]
 pub fn upload_sample(message: SaveSampleMessage) -> bool {
-    if let Ok(result) = SampleHandler::save_sample(&message.path) {
+    if let Ok(_result) = SampleHandler::save_sample(&message.path) {
         true
     } else {
         false

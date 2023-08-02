@@ -1,11 +1,13 @@
 import { appWindow } from '@tauri-apps/api/window'
 import { useEffect } from 'react';
 
-export default function useTitlebar() {
+export default function useTitlebar(color: string) {
     useEffect(() => {
         const minimize = () => appWindow.minimize();
         const maximize = () => appWindow.maximize();
         const close = () => appWindow.close();
+
+        document.getElementById('titlebar')!.style.background = color;
 
         document
             .getElementById('titlebar-minimize')!.addEventListener('click', minimize)

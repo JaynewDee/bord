@@ -48,11 +48,11 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
         useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
 
     const detailStyles = displayDetails ? { left: tooltipPosition.x, top: tooltipPosition.y } : { display: "none" };
-
+    const buttonStyles = data.name === "Unassigned" ? { border: "1px solid grey" } : {}
     return <>
         <div className="config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
             <button onClick={() => data.sample?.filename && play(data.sample.filename)} style={
-                data.name === "Unassigned" ? { border: "1px solid grey" } : { border: "1px solid green" }
+                buttonStyles
             }></button>
             <span className="config-pad-details" style={detailStyles}>
                 {displayDetails && data.name}

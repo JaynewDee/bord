@@ -22,6 +22,7 @@ id3 = "1.7.0"
 soloud = "1.0.2"
 mp3-duration = "0.1.10"
 infer = "0.15.0"
+nanoid = "0.4.0"
 
 [features]
 # by default Tauri runs in production mode

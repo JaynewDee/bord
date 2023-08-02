@@ -4,7 +4,7 @@
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
     "withGlobalTauri": false,
-    "distDir": ""
+    "distDir": "../dist"
   },
   "package": {
     "productName": "bord",

@@ -1,5 +1,5 @@
 import "./main-nav.css";
-import { GenericSetter } from '../ffi/invoke';
+import { Invoker, GenericSetter } from '../ffi/invoke';
 
 type DisplaySetter = GenericSetter<string>;
 
@@ -14,6 +14,8 @@ export default function MainNav(setDisplay: DisplaySetter) {
             <p onClick={() => navigate("samples")}>Manage Samples</p>
             <span>|</span>
             <p onClick={() => navigate("board_config")}>Configure Board</p>
+            <span>|</span>
+            <p onClick={() => Invoker.ping("beep")}>Ping</p>
         </nav>
     )
 }

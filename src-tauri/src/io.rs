@@ -91,7 +91,7 @@ impl SampleHandler {
         config_path
     }
 
-    fn file_path(filename: &str) -> PathBuf {
+    pub fn file_path(filename: &str) -> PathBuf {
         let mut data_dir = Self::data_dir();
 
         data_dir.push(filename);
@@ -135,21 +135,10 @@ impl SampleHandler {
     pub fn play_sample(filename: String) -> Result<(), Box<dyn std::error::Error>> {
         let full_path = Self::file_path(&filename);
 
-        AudioInterface::play_from_file(&full_path)?;
+        println!("{:#?}", &full_path);
+        AudioInterface::play_from_file(&full_path).unwrap();
 
         Ok(())
-    }
-
-    fn check_exists(path: &PathBuf) -> bool {
-        let file = OpenOptions::new().open(path);
-
-        if let Ok(read) = file {
-            println!("Pre-existing config found.");
-            true
-        } else {
-            println!("Config not found.");
-            false
-        }
     }
 
     fn init_board_config() {

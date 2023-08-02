@@ -1,8 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { Dispatch, SetStateAction } from "react";
 
-const defaultMsg = (cmnd: string) => `Command ${cmnd} invoked by TS`
-
 enum Command {
     Default = "default_sound",
     Upload = "upload_sample",
@@ -10,7 +8,8 @@ enum Command {
     BoardConfig = "board_config",
     UpdateConfig = "update_config",
     DeleteSample = "delete_sample",
-    PlaySample = "play_sample"
+    PlaySample = "play_sample",
+    Ping = "ping"
 }
 
 export class Invoker {
@@ -21,8 +20,8 @@ export class Invoker {
         return [samples, config]
     }
 
-    static playBeep = async () =>
-        await invoke(Command.Default, { msg: defaultMsg(Command.Default) })
+    static ping = async (sound: string) =>
+        await invoke(Command.Ping, { sound })
 
     static uploadSample = async (message: AudioFileUploadMessage): Promise<boolean> => {
         return await invoke(Command.Upload, { message })

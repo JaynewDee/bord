@@ -24,6 +24,7 @@ impl Default for BoardConfig {
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Sample {
+    pub id: String,
     pub name: String,
     pub filename: String,
     pub duration: f64,
@@ -91,12 +92,6 @@ impl From<Vec<DirEntry>> for AllSamples {
     }
 }
 
-impl AllSamples {
-    pub fn new(samples: SamplesList) -> Self {
-        Self { list: samples }
-    }
-}
-
 impl From<DirEntry> for Sample {
     fn from(value: DirEntry) -> Self {
         let path = value.path();
@@ -105,6 +100,7 @@ impl From<DirEntry> for Sample {
             if let Some(file_name) = path.file_name() {
                 if let Some(file_name_str) = file_name.to_str() {
                     let sample = Sample {
+                        id: nanoid::nanoid!(),
                         name: file_name_str.to_owned(),
                         filename: file_name_str.to_owned(),
                         // Probably shouldn't open every file just for duration.  Should record duration on save?
@@ -191,15 +187,11 @@ impl AudioInterface {
 
         let sl = Soloud::default()?;
 
-        let mut wav = audio::Wav::default();
-
-        wav.load(filepath)?;
-
-        sl.play(&wav);
-
-        while sl.voice_count() > 0 {
-            thread::sleep(time::Duration::from_millis(100));
-        }
+        let voice_count = sl.voice_count();
+        println!("{}", &voice_count);
+        AudioManager::new().with_interruption(filepath, &sl);
+        let voice_count = sl.voice_count();
+        println!("{}", &voice_count);
 
         let elapsed = time::Instant::now() - start;
 
@@ -207,5 +199,46 @@ impl AudioInterface {
         println!("Elapsed duration: {:?}", &elapsed);
 
         Ok(())
+    }
+}
+
+use std::sync::{Arc, Mutex};
+
+struct AudioManager {
+    // Mutex to hold the currently playing audio sample (if any)
+    current_sample: Arc<Mutex<Option<PathBuf>>>,
+}
+
+impl AudioManager {
+    pub fn new() -> Self {
+        Self {
+            current_sample: Arc::new(Mutex::new(None)),
+        }
+    }
+
+    pub fn with_interruption(&self, sample_path: &PathBuf, sl: &Soloud) {
+        let mut wav = audio::Wav::default();
+
+        wav.load(sample_path).unwrap();
+
+        // Lock the mutex to check if another sample is playing
+        let mut current_sample_guard = self.current_sample.lock().unwrap();
+
+        let audio_handle = sl.play(&wav);
+
+        // If another sample is playing, stop it
+        if let Some(_) = &*current_sample_guard {
+            sl.stop(audio_handle);
+        }
+
+        // Update the currently playing sample
+        *current_sample_guard = Some(sample_path.to_owned());
+
+        // Simulate playback for 2 seconds (Replace this with your actual audio playback code)
+        while sl.voice_count() > 0 {
+            thread::sleep(time::Duration::from_millis(100));
+        }
+        // Release the lock and reset the current sample to None
+        *current_sample_guard = None;
     }
 }

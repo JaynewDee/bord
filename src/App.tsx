@@ -7,6 +7,8 @@ import { Invoker, BoardConfig, AllSamples } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
 import { useTitlebar } from "./hooks";
 import { AllSamplesDefault, DefaultBoardConfig } from "./data";
+import useDataInitializer from "./hooks/useDataInitializer";
+import { useNumpadListeners } from "./events/keyEvents";
 
 function App() {
   const [userSamples, setUserSamples] = useState<AllSamples>(AllSamplesDefault)
@@ -17,17 +19,10 @@ function App() {
 
   ///////
 
-  useTitlebar()
+  useTitlebar("#329ea3")
 
-  useEffect(() => {
-    Invoker.initialize().then(([samples, config]) => {
-      console.log(samples)
-      setUserSamples(samples);
-      console.log(config)
-      setBoardConfig(config);
-    })
-  }, [])
-
+  useNumpadListeners();
+  useDataInitializer(setUserSamples, setBoardConfig)
 
   const displaySwitch = (state: string) => {
     const displays: { [key: string]: JSX.Element } = {
