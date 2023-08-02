@@ -18,5 +18,4 @@ export default function useMouseEnterTooltip(tooltipSetter: TooltipSetter, displ
     }
 
     return [handleMouseEnter, handleMouseLeave]
-
 }

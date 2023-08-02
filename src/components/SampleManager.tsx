@@ -1,7 +1,7 @@
-import { UploadSampleForm } from './UploadSample'
 import { Samples, SamplesSetter } from "./Samples";
 import "./sample-manager.css";
-import { AllSamples, SamplesList } from '../ffi/invoke';
+import { AllSamples } from '../ffi/invoke';
+import { useFileDrop } from '../hooks/useFileDrop';
 
 ///////
 // Add or Remove samples
@@ -12,10 +12,11 @@ interface ManagerProps {
     setter: SamplesSetter
 }
 
-const SampleManager = ({ samples, setter }: ManagerProps) => {
+function SampleManager({ samples, setter }: ManagerProps) {
+    useFileDrop(setter);
+
     return (
         <div className="sample-manager">
-            <UploadSampleForm setUserSamples={setter} />
             <Samples userSamples={samples} setUserSamples={setter} theme="manager" />
         </div>
     )

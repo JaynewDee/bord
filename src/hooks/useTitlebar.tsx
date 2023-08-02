@@ -8,11 +8,11 @@ export default function useTitlebar() {
         const close = () => appWindow.close();
 
         document
-            .getElementById('titlebar-minimize')?.addEventListener('click', minimize)
+            .getElementById('titlebar-minimize')!.addEventListener('click', minimize)
         document
-            .getElementById('titlebar-maximize')?.addEventListener('click', maximize)
+            .getElementById('titlebar-maximize')!.addEventListener('click', maximize)
         document
-            .getElementById('titlebar-close')?.addEventListener('click', close)
+            .getElementById('titlebar-close')!.addEventListener('click', close)
 
         return () => {
             document.removeEventListener('click', minimize);

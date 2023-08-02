@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BORD</title>
   <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+    }
+
     .titlebar {
       height: 30px;
       background: #329ea3;
@@ -16,6 +21,14 @@
       top: 0;
       left: 0;
       right: 0;
+      border-bottom: 3px solid white;
+    }
+
+    .title-header {
+      margin-right: auto;
+      font-size: 1.5rem;
+      margin-top: .3rem;
+      margin-left: .3rem;
     }
 
     .titlebar-button {
@@ -34,6 +47,7 @@
 
 <body>
   <div data-tauri-drag-region class="titlebar">
+    <h1 class="title-header">bord</h1>
     <div class="titlebar-button" id="titlebar-minimize">
       <img src="https://api.iconify.design/mdi:window-minimize.svg" alt="minimize" />
     </div>

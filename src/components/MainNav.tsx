@@ -3,7 +3,7 @@ import { GenericSetter } from '../ffi/invoke';
 
 type DisplaySetter = GenericSetter<string>;
 
-const MainNav = (setDisplay: DisplaySetter) => {
+function MainNav(setDisplay: DisplaySetter) {
 
     const navigate = (display: string) => setDisplay(display)
 

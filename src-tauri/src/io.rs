@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::audio::{AllSamples, Pads, SamplesList};
+use crate::audio::{AllSamples, Pads};
 
 use super::audio::{AudioInterface, BoardConfig};
 

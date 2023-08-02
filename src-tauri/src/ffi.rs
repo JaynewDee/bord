@@ -1,5 +1,5 @@
 use super::io::SampleHandler;
-use crate::audio::{AllSamples, AudioInterface, BoardConfig, SamplesList};
+use crate::audio::{AllSamples, AudioInterface, BoardConfig};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
