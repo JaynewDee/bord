@@ -1,7 +1,7 @@
 import { Samples, SamplesSetter } from "./Samples";
 import "./sample-manager.css";
 import { AllSamples } from '../ffi/invoke';
-import { useFileDrop } from '../hooks/useFileDrop';
+import { useFileDrop } from '../hooks';
 
 ///////
 // Add or Remove samples
@@ -12,7 +12,7 @@ interface ManagerProps {
     setter: SamplesSetter
 }
 
-function SampleManager({ samples, setter }: ManagerProps) {
+export default function SampleManager({ samples, setter }: ManagerProps) {
     useFileDrop(setter);
 
     return (
@@ -22,4 +22,3 @@ function SampleManager({ samples, setter }: ManagerProps) {
     )
 }
 
-export default SampleManager

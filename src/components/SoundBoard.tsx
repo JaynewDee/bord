@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, MouseEvent } from "react";
 import { Invoker, BoardConfig, Pad } from "../ffi/invoke";
 import "./sound-board.css";
-import useMouseEnterTooltip from "../hooks/useTooltip";
-import useBoardState from "../hooks/useBoardState";
+import { useBoardState, useMouseEnterTooltip } from "../hooks";
 
 ///////
 // Make sounds
@@ -15,7 +14,7 @@ interface BoardProps {
     theme: string
 }
 
-function SoundBoard({ configuration, theme }: BoardProps) {
+export default function SoundBoard({ configuration, theme }: BoardProps) {
 
     const boardState = useBoardState(configuration);
 
@@ -32,7 +31,7 @@ function SoundBoard({ configuration, theme }: BoardProps) {
 }
 
 const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
-    const handlePadClick = (_: any) => {
+    const handlePadClick = (_: MouseEvent<HTMLButtonElement>) => {
         data.sample?.filename && play(data.sample.filename)
     }
 
@@ -61,5 +60,3 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
         </div>
     </>
 }
-
-export default SoundBoard;

@@ -1,5 +1,6 @@
 import { GenericSetter } from "../ffi/invoke";
 import { MouseEvent } from "react";
+
 type TooltipSetter = GenericSetter<{ x: number, y: number }>;
 type DisplaySetter = GenericSetter<boolean>;
 

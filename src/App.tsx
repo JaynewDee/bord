@@ -5,7 +5,7 @@ import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
 import { Invoker, BoardConfig, AllSamples } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
-import useTitlebar from "./hooks/useTitlebar";
+import { useTitlebar } from "./hooks";
 import { AllSamplesDefault, DefaultBoardConfig } from "./data";
 
 function App() {

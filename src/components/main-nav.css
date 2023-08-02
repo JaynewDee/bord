@@ -17,9 +17,10 @@
 .main-nav>span {
    color: black;
    font-size: 115%;
+   pointer-events: none;
 }
 
 .main-nav>p:hover {
    text-decoration: overline 1px white;
-   font-style: italic;
+   transform: scale(.9)
 }

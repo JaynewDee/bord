@@ -4,9 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::audio::{AllSamples, Pads};
-
-use super::audio::{AudioInterface, BoardConfig};
+use super::audio::{AllSamples, AudioInterface, BoardConfig, Pads};
 
 pub struct SampleHandler;
 

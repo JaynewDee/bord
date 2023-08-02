@@ -15,7 +15,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    margin: auto 3rem auto auto;
+    margin: auto;
     height: 300px;
     width: 300px;
 }
@@ -31,16 +31,17 @@
 }
 
 .sample-list-configure {
-    justify-content: flex-start;
-    width: 33%;
+    justify-content: center;
+    width: 300px; 
 }
 
 .sample-list-configure>* {
     margin: 0;
 }
 
-.sample-list-configure .sample-name {
-    margin-left: 0;
+.sample-list-configure > .sample-list-item > .sample-name {
+    text-align: center; 
+    margin: auto;
 }
 
 .sample-list-configure .delete-sample-btn,

@@ -76,7 +76,7 @@ export type BoardConfig = {
 
 export type Pad = {
     name: string,
-    sample: SampleItem | undefined
+    sample: SampleItem
 }
 
 export type Pads = {

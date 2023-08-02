@@ -1,62 +1,14 @@
 import { BoardConfig, Pad, SampleItem } from "./ffi/invoke"
 import { BoardState } from "./hooks/useBoardState"
 
-const AllSamplesDefault = {
-    list: [
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        },
-        {
-            name: "",
-            filename: "",
-            duration: 0
-        }
-
-    ]
-}
-
-
 const DefaultSample: SampleItem = {
     name: "",
     filename: "",
     duration: 0
+}
+
+const AllSamplesDefault = {
+    list: Array(9).fill(DefaultSample)
 }
 
 const DefaultPad: Pad = {
@@ -65,7 +17,6 @@ const DefaultPad: Pad = {
 }
 
 const DefaultBoardState: BoardState = Array(9).fill(DefaultPad)
-
 
 const DefaultBoardConfig: BoardConfig = {
     pads: {

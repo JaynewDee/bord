@@ -10,7 +10,7 @@ import "./config-board.css"
 type SamplesSetter = GenericSetter<AllSamples>
 
 interface ConfigProps {
-    configuration?: BoardConfig;
+    configuration: BoardConfig;
     userSamples: AllSamples,
     setUserSamples: SamplesSetter;
 }

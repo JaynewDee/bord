@@ -6,11 +6,6 @@ import { emit } from '@tauri-apps/api/event';
 
 export type SamplesSetter = GenericSetter<AllSamples>
 
-interface SamplesProps {
-    userSamples: AllSamples;
-    setUserSamples: SamplesSetter;
-    theme: string
-}
 
 interface SampleProps {
     s: SampleItem,
@@ -22,18 +17,19 @@ function Sample({ s, setSamples }: SampleProps) {
 
     const sampleRef = useRef(null);
 
-    const handleDelete = async (_: MouseEvent<HTMLSpanElement>) => {
-        const curr = sampleRef.current as any;
+    const handleDelete = (_: MouseEvent<HTMLSpanElement>) => {
+        const curr = sampleRef.current as HTMLElement | null;
 
-        const remaining = await Invoker.deleteSample(curr.textContent);
-
-        setSamples(remaining);
+        curr && curr.textContent && Invoker.deleteSample(curr.textContent).then(remaining => setSamples(remaining));
     }
 
-    const handlePlaySample = async () => {
-        const current = sampleRef.current as any;
+    const handlePlaySample = () => {
+        const current = sampleRef.current as HTMLElement | null;
 
-        emit("play_sample", current.textContent)
+        const sampleName = current?.textContent;
+
+        current && sampleName &&
+            emit("play_sample",)
 
         playAnimation(sampleRef, setPlayState);
     }
@@ -63,6 +59,12 @@ function playAnimation(ref: MutableRefObject<null>, stateSetter: AnimationSetter
         stateSetter(false);
         el.parentElement.previousSibling.style.animation = `none`
     }, duration * 1000);
+}
+
+interface SamplesProps {
+    userSamples: AllSamples;
+    setUserSamples: SamplesSetter;
+    theme: string
 }
 
 export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {
