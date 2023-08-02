@@ -6,14 +6,14 @@ import MainNav from "./components/MainNav";
 import { Invoker, BoardConfig, AllSamples } from "./ffi/invoke";
 import ConfigBoard from "./components/ConfigBoard";
 import useTitlebar from "./hooks/useTitlebar";
-import { AllSamplesDefault } from "./data";
+import { AllSamplesDefault, DefaultBoardConfig } from "./data";
 
 function App() {
   const [userSamples, setUserSamples] = useState<AllSamples>(AllSamplesDefault)
 
   const [displayState, setDisplayState] = useState("board");
 
-  const [boardConfig, setBoardConfig] = useState<BoardConfig>();
+  const [boardConfig, setBoardConfig] = useState<BoardConfig>(DefaultBoardConfig);
 
   ///////
 

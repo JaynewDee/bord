@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Invoker, BoardConfig, Pad } from "../ffi/invoke";
 import "./sound-board.css";
 import useMouseEnterTooltip from "../hooks/useTooltip";
@@ -10,9 +10,8 @@ import useBoardState from "../hooks/useBoardState";
 
 const play = (filename: string) => Invoker.playSample(filename);
 
-
 interface BoardProps {
-    configuration?: BoardConfig,
+    configuration: BoardConfig,
     theme: string
 }
 
@@ -22,7 +21,7 @@ function SoundBoard({ configuration, theme }: BoardProps) {
 
     return (
         <div className={`soundboard-${theme}`}>
-            {boardState && boardState.length && boardState.map(
+            {boardState.map(
                 (pad: Pad, idx: number) =>
                     theme === "main" ?
                         <SamplePad data={pad} idx={idx} />
@@ -49,12 +48,14 @@ const ConfigPad = ({ data, idx }: { data: Pad, idx: number }) => {
     const [handleMouseEnter, handleMouseLeave] =
         useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
 
+    const detailStyles = displayDetails ? { left: tooltipPosition.x, top: tooltipPosition.y } : { display: "none" };
+
     return <>
         <div className="config-pad" key={idx} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
             <button onClick={() => data.sample?.filename && play(data.sample.filename)} style={
                 data.name === "Unassigned" ? { border: "1px solid grey" } : { border: "1px solid green" }
             }></button>
-            <span className="config-pad-details" style={displayDetails ? { left: tooltipPosition.x, top: tooltipPosition.y } : { display: "none" }}>
+            <span className="config-pad-details" style={detailStyles}>
                 {displayDetails && data.name}
             </span>
         </div>

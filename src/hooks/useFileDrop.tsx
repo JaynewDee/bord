@@ -22,5 +22,4 @@ export async function useFileDrop(setter: SamplesSetter) {
     useEffect(() => {
         return unlisten
     }, [])
-
 }

@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { BoardConfig, Pad } from "../ffi/invoke";
+import { DefaultBoardState } from "../data";
 
-type BoardState = Pad[]
+export type BoardState = Pad[]
 
 export default function useBoardState(configuration: BoardConfig | undefined) {
-    const [boardState, setBoardState] = useState<BoardState>()
+    const [boardState, setBoardState] = useState<BoardState>(DefaultBoardState)
 
     useEffect(() => {
         if (!configuration) return;
