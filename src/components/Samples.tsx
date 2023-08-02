@@ -48,15 +48,15 @@ function Sample({ s, setSamples }: SampleProps) {
 
 type AnimationSetter = GenericSetter<boolean>
 
-function playAnimation(ref: MutableRefObject<null>, stateSetter: AnimationSetter) {
-    stateSetter(true)
+function playAnimation(ref: MutableRefObject<null>, setIsPlaying: AnimationSetter) {
+    setIsPlaying(true)
     const el = ref.current as any;
     const duration = parseFloat(el.getAttribute("data-duration"));
 
     el.parentElement.previousSibling.style.animation = `play-sample ${duration}s ease-in`
 
     setTimeout(() => {
-        stateSetter(false);
+        setIsPlaying(false);
         el.parentElement.previousSibling.style.animation = `none`
     }, duration * 1000);
 }
