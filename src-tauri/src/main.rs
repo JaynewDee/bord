@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use ffi::{board_config, delete_sample, greet, ping, samples_list, upload_sample};
+use ffi::{board_config, delete_sample, greet, ping, samples_list, update_config, upload_sample};
 use tauri::Manager;
 
 mod audio;
@@ -35,7 +35,8 @@ fn main() {
             upload_sample,
             samples_list,
             board_config,
-            delete_sample
+            delete_sample,
+            update_config
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

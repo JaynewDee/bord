@@ -66,8 +66,8 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 666,
-        "resizable": true,
+        "height": 550,
+        "resizable": false,
         "title": "bord",
         "width": 800,
         "fileDropEnabled": true,

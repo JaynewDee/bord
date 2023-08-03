@@ -3,7 +3,7 @@ use cpal::{Device, SupportedStreamConfig};
 use serde::{Deserialize, Serialize};
 use soloud::*;
 use std::thread;
-use std::time;
+use std::time::{self, Duration};
 use std::{
     fs::{DirEntry, File},
     path::PathBuf,
@@ -22,7 +22,28 @@ impl Default for BoardConfig {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+impl From<Vec<Pad>> for BoardConfig {
+    fn from(pads: Vec<Pad>) -> Self {
+        pads.into_iter()
+            .fold(BoardConfig::default(), |mut acc, val| {
+                match val.id.as_ref() {
+                    "a_1" => acc.pads.a_1 = val,
+                    "a_2" => acc.pads.a_2 = val,
+                    "a_3" => acc.pads.a_3 = val,
+                    "b_1" => acc.pads.b_1 = val,
+                    "b_2" => acc.pads.b_2 = val,
+                    "b_3" => acc.pads.b_3 = val,
+                    "c_1" => acc.pads.c_1 = val,
+                    "c_2" => acc.pads.c_2 = val,
+                    "c_3" => acc.pads.c_3 = val,
+                    _ => (),
+                }
+                acc
+            })
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Sample {
     pub id: String,
     pub name: String,
@@ -30,21 +51,32 @@ pub struct Sample {
     pub duration: f64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Pad {
-    name: String,
-    sample: Option<Sample>,
+    pub id: String,
+    pub name: String,
+    pub sample: Option<Sample>,
 }
 
 impl Default for Pad {
     fn default() -> Self {
         Self {
+            id: "".to_string(),
             name: "Unassigned".to_string(),
             sample: None,
         }
     }
 }
 
+impl Pad {
+    pub fn new(id: &str) -> Self {
+        Self {
+            id: id.to_string(),
+            name: "Unassigned".to_string(),
+            sample: None,
+        }
+    }
+}
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Pads {
     a_1: Pad,
@@ -61,15 +93,77 @@ pub struct Pads {
 impl Default for Pads {
     fn default() -> Self {
         Self {
-            a_1: Pad::default(),
-            a_2: Pad::default(),
-            a_3: Pad::default(),
-            b_1: Pad::default(),
-            b_2: Pad::default(),
-            b_3: Pad::default(),
-            c_1: Pad::default(),
-            c_2: Pad::default(),
-            c_3: Pad::default(),
+            a_1: Pad::new("a_1"),
+            a_2: Pad::new("a_2"),
+            a_3: Pad::new("a_3"),
+            b_1: Pad::new("b_1"),
+            b_2: Pad::new("b_2"),
+            b_3: Pad::new("b_3"),
+            c_1: Pad::new("c_1"),
+            c_2: Pad::new("c_2"),
+            c_3: Pad::new("c_3"),
+        }
+    }
+}
+pub struct PadsIterator {
+    pads: Pads,
+    current_index: usize,
+}
+
+impl Iterator for PadsIterator {
+    type Item = Pad;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.current_index {
+            0 => {
+                self.current_index += 1;
+                Some(self.pads.a_1.clone())
+            }
+            1 => {
+                self.current_index += 1;
+                Some(self.pads.a_2.clone())
+            }
+            2 => {
+                self.current_index += 1;
+                Some(self.pads.a_3.clone())
+            }
+            3 => {
+                self.current_index += 1;
+                Some(self.pads.b_1.clone())
+            }
+            4 => {
+                self.current_index += 1;
+                Some(self.pads.b_2.clone())
+            }
+            5 => {
+                self.current_index += 1;
+                Some(self.pads.b_3.clone())
+            }
+            6 => {
+                self.current_index += 1;
+                Some(self.pads.c_1.clone())
+            }
+            7 => {
+                self.current_index += 1;
+                Some(self.pads.c_2.clone())
+            }
+            8 => {
+                self.current_index += 1;
+                Some(self.pads.c_3.clone())
+            }
+            _ => None,
+        }
+    }
+}
+
+impl IntoIterator for Pads {
+    type IntoIter = PadsIterator;
+    type Item = Pad;
+
+    fn into_iter(self) -> Self::IntoIter {
+        PadsIterator {
+            pads: self,
+            current_index: 0,
         }
     }
 }
@@ -182,16 +276,20 @@ impl AudioInterface {
             .collect()
     }
 
-    pub fn play_from_file(filepath: &std::path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn play_from_file(filepath: std::path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
         let start = time::Instant::now();
 
-        let sl = Soloud::default()?;
+        let mut thread_handles = Vec::new();
 
-        let voice_count = sl.voice_count();
-        println!("{}", &voice_count);
-        AudioManager::new().with_interruption(filepath, &sl);
-        let voice_count = sl.voice_count();
-        println!("{}", &voice_count);
+        let sample_handle = std::thread::spawn(move || {
+            AudioManager::new().with_interruption(filepath.clone());
+        });
+
+        thread_handles.push(sample_handle);
+
+        for handle in thread_handles {
+            handle.join().unwrap();
+        }
 
         let elapsed = time::Instant::now() - start;
 
@@ -216,29 +314,27 @@ impl AudioManager {
         }
     }
 
-    pub fn with_interruption(&self, sample_path: &PathBuf, sl: &Soloud) {
+    pub fn with_interruption(&self, sample_path: PathBuf) {
+        let sl = Soloud::default().unwrap();
+
         let mut wav = audio::Wav::default();
 
-        wav.load(sample_path).unwrap();
-
-        // Lock the mutex to check if another sample is playing
+        wav.load(sample_path.clone()).unwrap();
         let mut current_sample_guard = self.current_sample.lock().unwrap();
 
+        println!("{:#?}", current_sample_guard);
         let audio_handle = sl.play(&wav);
 
-        // If another sample is playing, stop it
         if let Some(_) = &*current_sample_guard {
             sl.stop(audio_handle);
+
+            *current_sample_guard = Some(sample_path.to_owned());
         }
 
-        // Update the currently playing sample
-        *current_sample_guard = Some(sample_path.to_owned());
-
-        // Simulate playback for 2 seconds (Replace this with your actual audio playback code)
-        while sl.voice_count() > 0 {
-            thread::sleep(time::Duration::from_millis(100));
+        while sl.active_voice_count() > 0 {
+            thread::sleep(Duration::from_millis(100));
         }
-        // Release the lock and reset the current sample to None
+
         *current_sample_guard = None;
     }
 }

@@ -4,6 +4,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use crate::{audio::Pad, ffi::PadAssignMessage};
+
 use super::audio::{AllSamples, AudioInterface, BoardConfig, Pads};
 
 pub struct SampleHandler;
@@ -110,6 +112,7 @@ impl SampleHandler {
     pub fn save_sample(path: &str) -> Result<String, anyhow::Error> {
         let mut file = File::open(path).unwrap();
         let destination = Self::sample_destination(path);
+
         let mut buffer = Self::sample_buffer(&file);
         file.read_to_end(&mut buffer).unwrap();
 
@@ -135,8 +138,26 @@ impl SampleHandler {
     pub fn play_sample(filename: String) -> Result<(), Box<dyn std::error::Error>> {
         let full_path = Self::file_path(&filename);
 
-        println!("{:#?}", &full_path);
-        AudioInterface::play_from_file(&full_path).unwrap();
+        AudioInterface::play_from_file(full_path).unwrap();
+
+        Ok(())
+    }
+
+    fn write_board_config(config: BoardConfig) -> Result<(), anyhow::Error> {
+        let mut config_path = Self::config_dir();
+
+        config_path.push("board_config.json");
+
+        let file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .open(&config_path);
+
+        let new_config = serde_json::to_string(&config).unwrap();
+
+        if let Ok(mut created) = file {
+            created.write_all(new_config.as_bytes())?;
+        };
 
         Ok(())
     }
@@ -198,6 +219,25 @@ impl SampleHandler {
                 pads: Pads::default(),
             }
         }
+    }
+
+    pub fn update_config_pad(update_message: PadAssignMessage) -> BoardConfig {
+        let sample = update_message.sample;
+        let pad_key = update_message.pad_key;
+
+        let prev_config = Self::read_board_config();
+
+        let mut new_config: Vec<Pad> = Vec::with_capacity(9);
+
+        prev_config.pads.into_iter().for_each(|mut p| {
+            if p.id == pad_key {
+                p.sample = Some(sample.clone());
+            }
+            new_config.push(p);
+        });
+
+        Self::write_board_config(new_config.into()).unwrap();
+        Self::read_board_config()
     }
 
     pub fn sample_entries() -> AllSamples {

@@ -1,5 +1,5 @@
 use super::io::SampleHandler;
-use crate::audio::{AllSamples, AudioInterface, BoardConfig};
+use crate::audio::{AllSamples, AudioInterface, BoardConfig, Sample};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -10,8 +10,8 @@ pub struct SaveSampleMessage {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct PadAssignMessage {
-    sample_path: String,
-    pad_assignment: usize,
+    pub sample: Sample,
+    pub pad_key: String,
 }
 
 #[tauri::command]
@@ -55,4 +55,11 @@ pub fn delete_sample(name: &str) -> AllSamples {
 #[tauri::command]
 pub fn board_config() -> BoardConfig {
     SampleHandler::read_board_config()
+}
+
+#[tauri::command]
+pub fn update_config(message: PadAssignMessage) -> BoardConfig {
+    println!("{:#?}", &message);
+    // use handler to perform operation
+    SampleHandler::update_config_pad(message)
 }
