@@ -22,6 +22,11 @@
 
 .sample-pad > button {
     border: 2px solid rgba(0, 59, 126, .7);
+    filter: drop-shadow(0 1px 2px black)
+}
+
+.sample-pad > button:hover {
+    filter: drop-shadow(0 0px 1px black) saturate(1.5)
 }
 
 .soundboard-main>div:nth-child(1) {

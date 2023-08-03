@@ -175,6 +175,7 @@ impl SampleHandler {
         let file = OpenOptions::new()
             .write(true)
             .create(true)
+            .truncate(true)
             .open(&config_path);
 
         let template = serde_json::to_string(&BoardConfig::default()).unwrap();
@@ -240,9 +241,7 @@ impl SampleHandler {
             if p.id == pad_key {
                 println!("Key match");
                 p.sample = Some(sample.clone());
-                if p.name == *"Unassigned" {
-                    p.name = sample.name.to_owned();
-                }
+                p.name = sample.name.to_owned();
             }
             new_config.push(p);
         });

@@ -38,7 +38,7 @@ function App() {
     setConfigMode
   }
 
-  useTitlebar("#000000")
+  useTitlebar("#121212")
 
   useNumpadListeners()
   useDataInitializer(setUserSamples, setBoardConfig)

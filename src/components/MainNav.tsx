@@ -14,7 +14,7 @@ export default function MainNav(setDisplay: DisplaySetter) {
             <p onClick={() => navigate("samples")}>Manage Samples</p>
             <span>|</span>
             <p onClick={() => navigate("board_config")}>Configure Board</p>
-            <span>|</span>
+            <span style={{ marginLeft: "auto" }}>|</span>
             <p onClick={() => Invoker.ping("beep")}>Ping</p>
         </nav>
     )
