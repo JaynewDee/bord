@@ -1,109 +1,138 @@
-.config-page {}
+.config-page {
+}
 
-.config-page>h3 {
-    text-align: center;
-    margin-bottom: 1rem;
+.config-page > h3 {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .board-configuration {
-    display: flex;
-    margin: 2rem 1rem 1rem;
+  display: flex;
+  margin: 2rem 1rem 0rem;
 }
 
 /* The counterpart to .soundbar-main in ./sound-board.css */
 .soundboard-configure {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    height: 300px;
-    width: 300px;
-    margin-left: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 300px;
+  width: 300px;
+  margin-left: 3rem;
 }
 
-.soundboard-configure>.config-pad>* {
-    height: 5rem;
-    width: 5rem;
-    margin: auto;
+.soundboard-configure > .config-pad > * {
+  height: 5rem;
+  width: 5rem;
+  margin: auto;
 }
 
 .config-pad {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .config-pad[data-config-mode="edit"] {
-    filter: blur(2px)
+  filter: blur(2px);
 }
 
 .config-pad[data-config-mode="edit"]:hover {
-    border: 3px solid rgba(0, 100, 159, .9);
-    border-radius: 5px;
-    filter: none;
+  border: 3px solid rgba(0, 100, 159, 0.9);
+  border-radius: 5px;
+  filter: none;
 }
 
 .config-pad-details {
-    position: absolute;
+  position: absolute;
 }
 
 .sample-hover-add-btn {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3px;
-    padding: 0;
-    cursor: pointer;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  padding: 0;
+  cursor: pointer;
+  left: 15%;
+  background: none;
+}
 
-    background-color: rgba(0, 59, 173, .7);
+.sample-hover-add-btn:hover {
+  color: green;
+}
+
+.mode-header {
+  text-align: center;
+  margin: 0;
+}
+
+.mode-header-value {
+  background-color: white;
+  border-radius: 3px;
+  padding: 0 3px;
+  font-weight: 900;
 }
 
 .sample-list-configure {
-    width: 300px;
-    margin-top: 1rem;
-    margin-left: 3rem;
+  width: 300px;
+  margin-top: 1rem;
+  margin-left: 3rem;
+  overflow-y: scroll;
+  direction: rtl;
 }
 
-.sample-list-configure>* {
-    margin: 0;
+.sample-list-configure::-webkit-scrollbar {
+  width: 8px;
+  background: white;
 }
 
-.sample-list-configure>.sample-list-item {}
+.sample-list-configure::-webkit-scrollbar-thumb {
+  background: black;
+}
+
+.sample-list-configure > * {
+  margin: 0;
+}
+
+.sample-list-configure > .sample-list-item {
+}
 
 .sample-list-configure .delete-sample-btn,
 .sample-list-configure .sample-duration {
-    display: none;
+  display: none;
 }
 
 .config-tools-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 50px;
-    margin: 0rem auto 0;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
-    overflow-x: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  margin: 0rem auto 0;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  overflow-x: scroll;
 }
 
 .config-tools-section::-webkit-scrollbar {
-    width: 3px;
-    height: 8px;
-    background: white;
+  width: 3px;
+  height: 8px;
+  background: white;
 }
 
 .config-tools-section::-webkit-scrollbar-thumb {
-    background-color: black;
+  background-color: black;
 }
 
 .reset-pads-btn {
-    padding: 3px 8px;
-    min-width: 80px;
+  padding: 3px 8px;
+  min-width: 80px;
 }
 
 .board-config-footer-section {
-    background-color: black;
-    width: 100%;
-    height: 50px;
+  background-color: black;
+  width: 100%;
+  height: 50px;
 }

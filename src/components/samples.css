@@ -1,49 +1,49 @@
 .sample-list-manager {
-    max-width: 66%;
-    margin: 2rem auto;
+  max-width: 66%;
+  margin: 2rem auto;
 }
 
 .sample-list-item {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
-.sample-list-item[data-play-state=true] {
+.sample-list-item[data-play-state="true"] {
 }
 
 .animate-bar {
-    background-color: black;
-    height: 3px;
-    width: 0px;
-    z-index: 3;
-    margin: 0 auto 0 0;
+  background-color: black;
+  height: 3px;
+  width: 0px;
+  z-index: 3;
+  margin: 0 auto 0 0;
 }
 
 .sample-name {
-    margin: auto auto auto 5rem;
-    padding: 5px 13px;
+  margin: auto auto auto 5rem;
+  padding: 5px 13px;
 }
 
 .sample-list-item:hover > .sample-name {
-    color: rgba(200, 230, 240, .9);
-    cursor: pointer;
+  color: rgba(200, 230, 240, 0.9);
+  cursor: pointer;
 }
 
 .delete-sample-btn {
-     cursor: pointer;
-     width: 1rem;
+  cursor: pointer;
+  width: 1rem;
 }
 
 .delete-sample-btn:hover {
-     color: red;
+  color: red;
 }
 
 @keyframes play-sample {
-    0% {
-        width: 0%;
-    }
+  0% {
+    width: 0%;
+  }
 
-    100% {
-        width: 100%;
-    }
+  100% {
+    width: 100%;
+  }
 }

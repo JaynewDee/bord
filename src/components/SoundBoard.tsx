@@ -1,10 +1,11 @@
-import { useState, MouseEvent, Dispatch, SetStateAction } from "react";
-import { Invoker, BoardConfig, Pad } from "../ffi/invoke";
+import { useState, MouseEvent, Dispatch } from "react";
+import { Invoker, Pad } from "../ffi/invoke";
 import "./sound-board.css";
 import { useBoardState, useMouseEnterTooltip } from "../hooks";
 import { ConfigModeState } from "../App";
 import { emit } from "@tauri-apps/api/event";
 import { useNumpadListeners } from "../events/keyEvents";
+import { ActionUnion, PageProps, ACTION } from "../hooks/useStateReducer";
 
 ///////
 // Make sounds
@@ -12,77 +13,118 @@ import { useNumpadListeners } from "../events/keyEvents";
 
 const play = (filename: string) => emit("play_sample", filename);
 
-interface BoardProps {
-    configuration: BoardConfig,
-    theme: string,
-    configMode: ConfigModeState,
-    setConfigMode: Dispatch<SetStateAction<ConfigModeState>>,
-    setBoardConfig: Dispatch<SetStateAction<BoardConfig>>
-}
+export default function SoundBoard({
+  appState,
+  stateDispatcher,
+  theme,
+}: PageProps) {
+  const boardState = useBoardState(appState.boardConfig);
 
-export default function SoundBoard({ configuration, theme, configMode, setConfigMode, setBoardConfig }: BoardProps) {
+  useNumpadListeners();
 
-    const boardState = useBoardState(configuration);
-
-    useNumpadListeners()
-
-    return (
-        <div className={`soundboard-${theme}`}>
-            {boardState.map(
-                (pad: Pad, idx: number) =>
-                    theme === "main" ?
-                        <SamplePad data={pad} idx={idx} />
-                        : <ConfigPad data={pad} idx={idx} configMode={configMode} setConfigMode={setConfigMode} setBoardConfig={setBoardConfig} />
-            )}
-        </div>
-    )
-}
-
-const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
-    const handlePadClick = (_: MouseEvent<HTMLButtonElement>) => {
-        data.sample?.filename && play(data.sample.filename)
-    }
-
-    return <div className="sample-pad" key={idx}>
-        <button style={data.sample ? { border: "2px solid green" } : {}} onClick={handlePadClick}></button>
+  return (
+    <div className={`soundboard-${theme}`}>
+      {boardState.map((pad: Pad, idx: number) =>
+        theme === "main" ? (
+          <SamplePad data={pad} idx={idx} />
+        ) : (
+          <ConfigPad
+            data={pad}
+            configMode={appState.configMode}
+            stateDispatcher={stateDispatcher}
+          />
+        ),
+      )}
     </div>
+  );
 }
 
-const ConfigPad = ({ data, idx, configMode, setConfigMode, setBoardConfig }: { data: Pad, idx: number, configMode: ConfigModeState, setConfigMode: Dispatch<SetStateAction<ConfigModeState>>, setBoardConfig: any }) => {
-    const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-    const [displayDetails, setDisplayDetails] = useState(false)
+const SamplePad = ({ data, idx }: { data: Pad; idx: number }) => {
+  const handlePadClick = (_: MouseEvent<HTMLButtonElement>) => {
+    data.sample?.filename && play(data.sample.filename);
+  };
 
-    const [handleMouseEnter, handleMouseLeave] =
-        useMouseEnterTooltip(setTooltipPosition, setDisplayDetails);
+  return (
+    <div className="sample-pad" key={idx}>
+      <button
+        style={data.sample ? { border: "2px solid green" } : {}}
+        onClick={handlePadClick}
+      ></button>
+    </div>
+  );
+};
 
-    const detailStyles = displayDetails ? { left: tooltipPosition.x, top: tooltipPosition.y } : { display: "none" };
-    const buttonStyles = data.name === "Unassigned" ? { border: "1px solid grey" } : {}
+const ConfigPad = ({
+  data,
+  configMode,
+  stateDispatcher,
+}: {
+  data: Pad;
+  configMode: ConfigModeState;
+  stateDispatcher: Dispatch<ActionUnion>;
+}) => {
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [displayDetails, setDisplayDetails] = useState(false);
 
-    const handlePadClick = (e: any) => {
-        if (configMode.mode !== "edit") return;
+  const [handleMouseEnter, handleMouseLeave] = useMouseEnterTooltip(
+    setTooltipPosition,
+    setDisplayDetails,
+  );
 
-        configMode &&
-            configMode.currentSample &&
-            data.id &&
-            Invoker.updateConfig({ pad_key: data.id, sample: configMode.currentSample }).then(newConfig => {
-                console.log(newConfig)
-                setBoardConfig(newConfig)
-            })
+  const detailStyles = displayDetails
+    ? { left: tooltipPosition.x, top: tooltipPosition.y }
+    : { display: "none" };
+  const buttonStyles =
+    data.name === "Unassigned" ? { border: "1px solid grey" } : {};
 
-        setConfigMode({ mode: "view", currentSample: undefined })
+  const handlePadClick = (e: any) => {
+    if (configMode.mode !== "edit") return;
 
-    }
+    configMode &&
+      configMode.currentSample &&
+      data.id &&
+      Invoker.updateConfig({
+        pad_key: data.id,
+        sample: configMode.currentSample,
+      }).then((newConfig) => {
+        console.log(newConfig);
+        stateDispatcher({
+          type: ACTION.UPDATE_BOARD_CONFIG,
+          payload: newConfig,
+        });
+      });
 
-    const assignedStyles = { border: "2px solid green", borderRadius: "5px" };
+    stateDispatcher({
+      type: ACTION.UPDATE_CONFIG_MODE,
+      payload: { mode: "view", currentSample: undefined },
+    });
+  };
 
-    return <>
-        <div style={data.sample ? assignedStyles : {}} className="config-pad" data-config-mode={configMode.mode} key={idx} onClick={handlePadClick} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
-            <button onClick={() => data.sample?.filename && configMode.mode === "view" && play(data.sample.filename)} style={
-                buttonStyles
-            }></button>
-            <span className="config-pad-details" style={detailStyles}>
-                {displayDetails && data.name}
-            </span>
-        </div>
+  const assignedStyles = { border: "2px solid green", borderRadius: "5px" };
+
+  return (
+    <>
+      <div
+        style={data.sample ? assignedStyles : {}}
+        className="config-pad"
+        data-config-mode={configMode.mode}
+        key={data.id}
+        onClick={handlePadClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <button
+          onClick={() =>
+            data.sample?.filename &&
+            configMode.mode === "view" &&
+            play(data.sample.filename)
+          }
+          style={buttonStyles}
+        ></button>
+        <span className="config-pad-details" style={detailStyles}>
+          {displayDetails && data.name}
+        </span>
+      </div>
     </>
-}
+  );
+};

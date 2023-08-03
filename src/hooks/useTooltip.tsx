@@ -1,23 +1,25 @@
 import { GenericSetter } from "../ffi/invoke";
 import { MouseEvent } from "react";
 
-type TooltipSetter = GenericSetter<{ x: number, y: number }>;
+type TooltipSetter = GenericSetter<{ x: number; y: number }>;
 type DisplaySetter = GenericSetter<boolean>;
 
 // Kind of a bad name .. should refactor to specific role
-export default function useMouseEnterTooltip(tooltipSetter: TooltipSetter, displaySetter: DisplaySetter) {
+export default function useMouseEnterTooltip(
+  tooltipSetter: TooltipSetter,
+  displaySetter: DisplaySetter,
+) {
+  const handleMouseEnter = (e: MouseEvent<any>) => {
+    const { clientX, clientY } = e;
 
-    const handleMouseEnter = (e: MouseEvent<any>) => {
-        const { clientX, clientY } = e;
+    tooltipSetter({ x: clientX, y: clientY });
+    displaySetter(true);
+  };
 
-        tooltipSetter({ x: clientX, y: clientY })
-        displaySetter(true)
-    }
+  const handleMouseLeave = (_: MouseEvent<any>) => {
+    tooltipSetter({ x: 0, y: 0 });
+    displaySetter(false);
+  };
 
-    const handleMouseLeave = (_: MouseEvent<any>) => {
-        tooltipSetter({ x: 0, y: 0 })
-        displaySetter(false)
-    }
-
-    return [handleMouseEnter, handleMouseLeave]
+  return [handleMouseEnter, handleMouseLeave];
 }

@@ -1,17 +1,17 @@
 .sample-manager {
-    margin: 1rem;
-    min-width: 30rem;
-    max-width: 80rem;
+  margin: 1rem;
+  min-width: 30rem;
+  max-width: 80rem;
 }
 
 .sample-manager > h3 {
-    margin-left: 5rem;
+  margin-left: 5rem;
 }
 
 .sample-hover-edit-name-btn {
-    position: absolute;
-    background: none;
-    padding: 3px 8px;
-    right: 33%;
-    cursor: pointer;
+  position: absolute;
+  background: none;
+  padding: 3px 8px;
+  right: 33%;
+  cursor: pointer;
 }

@@ -1,61 +1,52 @@
 import "./App.css";
-import { useState } from "react";
 import SoundBoard from "./components/SoundBoard";
 import SampleManager from "./components/SampleManager";
 import MainNav from "./components/MainNav";
-import { BoardConfig, AllSamples, SampleItem } from './ffi/invoke';
+import { BoardConfig, AllSamples, SampleItem } from "./ffi/invoke";
 import ConfigBoard, { Modes } from "./components/ConfigBoard";
 import { useTitlebar } from "./hooks";
-import { AllSamplesDefault, DefaultBoardConfig } from "./data";
 import useDataInitializer from "./hooks/useDataInitializer";
+import { ActionUnion, Display, useStateReducer } from "./hooks/useStateReducer";
+import { Dispatch } from "react";
 
-export type ConfigModeState = {
-  mode: Modes,
-  currentSample?: SampleItem
+export interface AppReducerState {
+  userSamples: AllSamples;
+  displayState: Display;
+  boardConfig: BoardConfig;
+  configMode: ConfigModeState;
 }
 
+export type ConfigModeState = {
+  mode: Modes;
+  currentSample?: SampleItem;
+};
+
 function App() {
-  const [userSamples, setUserSamples] = useState<AllSamples>(AllSamplesDefault)
-  const [displayState, setDisplayState] = useState("board");
-  const [boardConfig, setBoardConfig] = useState<BoardConfig>(DefaultBoardConfig);
-  const [configMode, setConfigMode] = useState<ConfigModeState>({ mode: "view", currentSample: undefined })
+  const [state, dispatch]: [AppReducerState, Dispatch<ActionUnion>] =
+    useStateReducer();
 
   ///////
 
-  const configurationPackage = {
-    configMode,
-    setConfigMode,
-    configuration: boardConfig,
-    setBoardConfig,
-    userSamples,
-    setUserSamples
-  }
+  useTitlebar("#121212");
 
-  const sampleManagerPackage = {
-    samples: userSamples,
-    setUserSamples,
-    setConfigMode
-  }
+  useDataInitializer(dispatch);
 
-  console.log(configMode)
-  useTitlebar("#121212")
-
-  useDataInitializer(setUserSamples, setBoardConfig)
-
-  const displaySwitch = (state: string) => {
+  const displaySwitch = (displayState: string) => {
     const displays: { [key: string]: JSX.Element } = {
-      "board": <SoundBoard {...configurationPackage} theme="main" />,
-      "samples": <SampleManager {...sampleManagerPackage} />,
-      "board_config": <ConfigBoard {...configurationPackage} />
-    }
+      board: (
+        <SoundBoard appState={state} stateDispatcher={dispatch} theme="main" />
+      ),
+      samples: <SampleManager appState={state} stateDispatcher={dispatch} />,
+      board_config: <ConfigBoard appState={state} stateDispatcher={dispatch} />,
+    };
 
-    return displays[state] || <></>
-  }
+    return displays[displayState] || <></>;
+  };
 
   return (
     <main className="App">
-      {MainNav(setDisplayState)}
-      {displaySwitch(displayState)}
+      {MainNav(dispatch)}
+      {displaySwitch(state.displayState)}
     </main>
   );
 }

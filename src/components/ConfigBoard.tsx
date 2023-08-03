@@ -1,66 +1,92 @@
-import { useEffect } from 'react'
-import { AllSamples, BoardConfig, GenericSetter, Invoker } from '../ffi/invoke'
-import { Samples } from './Samples'
-import SoundBoard from './SoundBoard'
-import "./config-board.css"
-import { ConfigModeState } from '../App'
+import { useEffect } from "react";
+import { Invoker } from "../ffi/invoke";
+import { Samples } from "./Samples";
+import SoundBoard from "./SoundBoard";
+import "./config-board.css";
+import { ACTION, PageProps } from "../hooks/useStateReducer";
 
 ///////
 // Manage 'Pad' assignments
 ///////
 
-type SamplesSetter = GenericSetter<AllSamples>
-type BoardConfigSetter = GenericSetter<BoardConfig>
-type ConfigModeSetter = GenericSetter<ConfigModeState>
+export type Modes = "view" | "edit" | "edit_name";
 
-interface ConfigProps {
-    userSamples: AllSamples,
-    setUserSamples: SamplesSetter;
-    configuration: BoardConfig;
-    setBoardConfig: BoardConfigSetter;
-    configMode: ConfigModeState;
-    setConfigMode: ConfigModeSetter
-}
+export default function ConfigBoard({ appState, stateDispatcher }: PageProps) {
+  useEffect(() => {
+    const handleClickOff = (e: any) => {
+      const isValidTarget = Array.from(e.target.classList).includes(
+        "config-page",
+      );
 
-export type Modes = "view" | "edit";
+      if (isValidTarget) {
+        stateDispatcher({
+          type: ACTION.UPDATE_CONFIG_MODE,
+          payload: { mode: "view", currentSample: undefined },
+        });
+      }
+    };
 
-export default function ConfigBoard({ configuration, userSamples, setUserSamples, setConfigMode, setBoardConfig, configMode }: ConfigProps) {
-    useEffect(() => {
-        const handleClickOff = (e: any) => {
-            const isValidTarget = Array.from(e.target.classList).includes("config-page")
+    document.addEventListener("click", handleClickOff);
 
-            if (isValidTarget) {
-                setConfigMode({ mode: "view", currentSample: undefined })
-            }
-        }
+    return () => document.removeEventListener("click", handleClickOff);
+  }, []);
 
-        document.addEventListener('click', handleClickOff)
+  const handleBoardReset = () => {
+    Invoker.resetBoardConfig().then((newConfig) => {
+      stateDispatcher({ type: ACTION.UPDATE_BOARD_CONFIG, payload: newConfig });
 
-        return () => document.removeEventListener('click', handleClickOff)
-    }, [])
+      stateDispatcher({
+        type: ACTION.UPDATE_CONFIG_MODE,
+        payload: { mode: "view", currentSample: undefined },
+      });
+    });
+  };
 
-    const handleBoardReset = () => {
-        Invoker.resetBoardConfig().then(newConfig =>
-            setBoardConfig(newConfig)
-        )
-    }
-    return (
-        <article className="config-page">
-            <h3 >BOARD CONFIGURATION</h3>
-            <section className="board-configuration">
-                {/* Reuse component with unique "theme flag" */}
-                <Samples userSamples={userSamples} setUserSamples={setUserSamples} theme="configure" setConfigMode={setConfigMode} />
-                <SoundBoard configuration={configuration} theme="configure" configMode={configMode} setConfigMode={setConfigMode} setBoardConfig={setBoardConfig} />
-            </section>
-            <section className="config-tools-section">
-                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
+  const { configMode, userSamples } = appState;
 
-                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
+  return (
+    <article className="config-page">
+      <h3>BOARD CONFIGURATION</h3>
+      <h5 className="mode-header">
+        Mode:{" "}
+        <span
+          className="mode-header-value"
+          style={
+            configMode.mode === "edit"
+              ? { color: "green" }
+              : { color: "rgba(0, 59, 159, 1)" }
+          }
+        >
+          {configMode.mode.toUpperCase()}
+        </span>
+      </h5>
+      <section className="board-configuration">
+        {/* Reuse component with unique "theme flag" */}
+        <Samples
+          theme="configure"
+          appState={appState}
+          stateDispatcher={stateDispatcher}
+        />
+        <SoundBoard
+          appState={appState}
+          stateDispatcher={stateDispatcher}
+          theme="configure"
+        />
+      </section>
+      <section className="config-tools-section">
+        <button className="reset-pads-btn" onClick={handleBoardReset}>
+          RESET ALL
+        </button>
 
-                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
-            </section>
-            <section className='board-config-footer-section'></section>
+        <button className="reset-pads-btn" onClick={handleBoardReset}>
+          RESET ALL
+        </button>
 
-        </article>
-    )
+        <button className="reset-pads-btn" onClick={handleBoardReset}>
+          RESET ALL
+        </button>
+      </section>
+      <section className="board-config-footer-section"></section>
+    </article>
+  );
 }

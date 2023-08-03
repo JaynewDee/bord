@@ -1,21 +1,20 @@
 import "./main-nav.css";
-import { Invoker, GenericSetter } from '../ffi/invoke';
+import { Invoker, GenericSetter } from "../ffi/invoke";
+import { ACTION, Display, StateDispatch } from "../hooks/useStateReducer";
 
-type DisplaySetter = GenericSetter<string>
+export default function MainNav(dispatch: StateDispatch) {
+  const navigate = (display: Display) =>
+    dispatch({ type: ACTION.UPDATE_DISPLAY, payload: display });
 
-export default function MainNav(setDisplay: DisplaySetter) {
-
-    const navigate = (display: string) => setDisplay(display)
-
-    return (
-        <nav className="main-nav">
-            <p onClick={() => navigate("board")}>My Board</p>
-            <span>|</span>
-            <p onClick={() => navigate("samples")}>Manage Samples</p>
-            <span>|</span>
-            <p onClick={() => navigate("board_config")}>Configure Board</p>
-            <span style={{ marginLeft: "auto" }}>|</span>
-            <p onClick={() => Invoker.ping("beep")}>Ping</p>
-        </nav>
-    )
+  return (
+    <nav className="main-nav">
+      <p onClick={() => navigate("board")}>My Board</p>
+      <span>|</span>
+      <p onClick={() => navigate("samples")}>Manage Samples</p>
+      <span>|</span>
+      <p onClick={() => navigate("board_config")}>Configure Board</p>
+      <span style={{ marginLeft: "auto" }}>|</span>
+      <p onClick={() => Invoker.ping("beep")}>Ping</p>
+    </nav>
+  );
 }

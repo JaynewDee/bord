@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { Invoker } from "../ffi/invoke";
+import { ACTION, StateDispatch } from "./useStateReducer";
 
-type InitSetter = Dispatch<SetStateAction<any>>;
+export default function useDataInitializer(stateDispatcher: StateDispatch) {
+  useEffect(() => {
+    Invoker.initialize().then(([samples, config]) => {
+      stateDispatcher({ type: ACTION.UPDATE_SAMPLES, payload: samples });
 
-export default function useDataInitializer(setUserSamples: InitSetter, setBoardConfig: InitSetter) {
-    useEffect(() => {
-        Invoker.initialize().then(([samples, config]) => {
-            setUserSamples(samples);
-            setBoardConfig(config);
-        })
-    }, [])
+      stateDispatcher({ type: ACTION.UPDATE_BOARD_CONFIG, payload: config });
+    });
+  }, []);
 }
