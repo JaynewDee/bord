@@ -3,7 +3,8 @@ import { AllSamples, GenericSetter, Invoker, SampleItem, SamplesList } from '../
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
-import { Modes } from './ConfigBoard';
+import { ImPencil2 as Pencil } from "react-icons/im"
+import { AiOutlinePlusSquare as Plus } from "react-icons/ai"
 import { ConfigModeState } from '../App';
 
 export type SamplesSetter = GenericSetter<AllSamples>
@@ -15,10 +16,13 @@ interface SampleProps {
     setConfigMode: any
 }
 
-const SampleOptions = (theme: string, hoverState: boolean, handleEnterEditMode: any) => {
+const SampleOptions = (theme: string, hoverState: boolean, handleEnterEditMode?: any, handleEnterEditNameMode?: any) => {
     return <div className="sample-list-options">
         {theme === "configure" ?
-            <button style={hoverState ? { display: "inline-block" } : { display: "none" }} className="sample-hover-add-btn" onClick={handleEnterEditMode}>+</button> : <></>
+            <button style={hoverState ? { display: "inline-block" } : { display: "none" }} className="sample-hover-add-btn" onClick={handleEnterEditMode}>{Plus({ size: "1.5rem" })}</button>
+            : theme === "manager" ?
+                <button style={hoverState ? { display: "inline-block" } : { display: "none" }} className="sample-hover-edit-name-btn" onClick={handleEnterEditNameMode}>{Pencil({})}</button>
+                : <></>
         }
     </div>
 }
@@ -51,15 +55,16 @@ function Sample({ s, setSamples, theme, setConfigMode }: SampleProps) {
     }
 
     const handleEnterEditMode = () => setConfigMode({ mode: "edit", currentSample: s })
+    const handleEnterEditNameMode = () => setConfigMode({ mode: "edit_name", currentSample: s })
 
     return (
         <>
             <p className="animate-bar"></p>
             <div className="sample-list-item" data-play-state={playState} draggable="true" onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
                 <span className="delete-sample-btn" onClick={handleDelete}>X</span>
-                <p className="sample-name" onClick={handlePlaySample} ref={sampleRef} data-duration={s.duration}>{s.name}</p>
+                <button className="sample-name" onClick={handlePlaySample} ref={sampleRef} data-duration={s.duration}>{s.name}</button>
                 <span className="sample-duration"> {formatDuration(s.duration)}</span>
-                {SampleOptions(theme, hoverState, handleEnterEditMode)}
+                {SampleOptions(theme, hoverState, theme === "configure" ? handleEnterEditMode : handleEnterEditNameMode)}
             </div>
         </>
     )

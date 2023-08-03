@@ -21,6 +21,7 @@
 
 .sample-name {
     margin: auto auto auto 5rem;
+    padding: 5px 13px;
 }
 
 .sample-list-item:hover > .sample-name {

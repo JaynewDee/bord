@@ -1,15 +1,13 @@
-.config-page {
-
-}
+.config-page {}
 
 .config-page>h3 {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .board-configuration {
     display: flex;
-    margin: 3rem 1rem;
+    margin: 2rem 1rem 1rem;
 }
 
 /* The counterpart to .soundbar-main in ./sound-board.css */
@@ -17,7 +15,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-     height: 300px;
+    height: 300px;
     width: 300px;
     margin-left: 3rem;
 }
@@ -39,9 +37,9 @@
 }
 
 .config-pad[data-config-mode="edit"]:hover {
-   border: 3px solid rgba(0, 100, 159, .9); 
-   border-radius: 5px;
-   filter: none;
+    border: 3px solid rgba(0, 100, 159, .9);
+    border-radius: 5px;
+    filter: none;
 }
 
 .config-pad-details {
@@ -49,23 +47,28 @@
 }
 
 .sample-hover-add-btn {
-    padding: .1rem .3rem;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    padding: 0;
     cursor: pointer;
+
     background-color: rgba(0, 59, 173, .7);
 }
 
 .sample-list-configure {
-    width: 300px; 
+    width: 300px;
     margin-top: 1rem;
     margin-left: 3rem;
- }
+}
 
 .sample-list-configure>* {
     margin: 0;
 }
 
-.sample-list-configure > .sample-list-item {
-}
+.sample-list-configure>.sample-list-item {}
 
 .sample-list-configure .delete-sample-btn,
 .sample-list-configure .sample-duration {
@@ -75,9 +78,32 @@
 .config-tools-section {
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    margin: 0rem auto 0;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    overflow-x: scroll;
 }
+
+.config-tools-section::-webkit-scrollbar {
+    width: 3px;
+    height: 8px;
+    background: white;
+}
+
+.config-tools-section::-webkit-scrollbar-thumb {
+    background-color: black;
+}
+
 .reset-pads-btn {
-    
-    padding: 3px 5px;
-    font-size: 80%;
+    padding: 3px 8px;
+    min-width: 80px;
+}
+
+.board-config-footer-section {
+    background-color: black;
+    width: 100%;
+    height: 50px;
 }

@@ -55,7 +55,11 @@ export default function ConfigBoard({ configuration, userSamples, setUserSamples
             <section className="config-tools-section">
                 <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
 
+                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
+
+                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
             </section>
+            <section className='board-config-footer-section'></section>
 
         </article>
     )

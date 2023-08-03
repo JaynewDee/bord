@@ -8,7 +8,6 @@ import ConfigBoard, { Modes } from "./components/ConfigBoard";
 import { useTitlebar } from "./hooks";
 import { AllSamplesDefault, DefaultBoardConfig } from "./data";
 import useDataInitializer from "./hooks/useDataInitializer";
-import { useNumpadListeners } from "./events/keyEvents";
 
 export type ConfigModeState = {
   mode: Modes,
@@ -38,9 +37,9 @@ function App() {
     setConfigMode
   }
 
+  console.log(configMode)
   useTitlebar("#121212")
 
-  useNumpadListeners()
   useDataInitializer(setUserSamples, setBoardConfig)
 
   const displaySwitch = (state: string) => {

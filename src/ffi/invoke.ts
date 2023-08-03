@@ -10,6 +10,7 @@ enum Command {
     ResetBoardConfig = "reset_board_config",
     DeleteSample = "delete_sample",
     PlaySample = "play_sample",
+    UpdateSampleName = "update_sample_name",
     Ping = "ping"
 }
 
@@ -37,10 +38,14 @@ export class Invoker {
         return await invoke(Command.AllSamples)
     }
 
+    static updateSampleName = async (newName: string): Promise<SamplesList> => {
+        return await invoke(Command.UpdateSampleName, { newName })
+    }
+
     static boardConfig = async (): Promise<BoardConfig> => {
         return await invoke(Command.BoardConfig)
     }
-    // padKey: "a_1" | "a_2".."b_1" | "c_3" etc
+
     static updateConfig = async (message: UpdateConfigMessage): Promise<BoardConfig> => {
         return await invoke(Command.UpdateConfig, { message })
     }
@@ -48,6 +53,7 @@ export class Invoker {
     static resetBoardConfig = async (): Promise<BoardConfig> => {
         return await invoke(Command.ResetBoardConfig)
     }
+
     static deleteSample = async (name: string): Promise<AllSamples> => {
         return await invoke(Command.DeleteSample, { name })
     }

@@ -4,6 +4,7 @@ import "./sound-board.css";
 import { useBoardState, useMouseEnterTooltip } from "../hooks";
 import { ConfigModeState } from "../App";
 import { emit } from "@tauri-apps/api/event";
+import { useNumpadListeners } from "../events/keyEvents";
 
 ///////
 // Make sounds
@@ -22,6 +23,8 @@ interface BoardProps {
 export default function SoundBoard({ configuration, theme, configMode, setConfigMode, setBoardConfig }: BoardProps) {
 
     const boardState = useBoardState(configuration);
+
+    useNumpadListeners()
 
     return (
         <div className={`soundboard-${theme}`}>
