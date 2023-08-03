@@ -33,11 +33,7 @@ pub fn ping(sound: &str) {
 
 #[tauri::command]
 pub fn upload_sample(message: SaveSampleMessage) -> bool {
-    if let Ok(_result) = SampleHandler::save_sample(&message.path) {
-        true
-    } else {
-        false
-    }
+    matches!(SampleHandler::save_sample(&message.path), Ok(_result))
 }
 
 #[tauri::command]
@@ -59,7 +55,11 @@ pub fn board_config() -> BoardConfig {
 
 #[tauri::command]
 pub fn update_config(message: PadAssignMessage) -> BoardConfig {
-    println!("{:#?}", &message);
-    // use handler to perform operation
     SampleHandler::update_config_pad(message)
+}
+
+#[tauri::command]
+pub fn reset_board_config() -> BoardConfig {
+    SampleHandler::init_board_config();
+    SampleHandler::read_board_config()
 }

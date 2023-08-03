@@ -15,10 +15,11 @@ interface BoardProps {
     configuration: BoardConfig,
     theme: string,
     configMode: ConfigModeState,
-    setConfigMode: Dispatch<SetStateAction<ConfigModeState>>
+    setConfigMode: Dispatch<SetStateAction<ConfigModeState>>,
+    setBoardConfig: Dispatch<SetStateAction<BoardConfig>>
 }
 
-export default function SoundBoard({ configuration, theme, configMode, setConfigMode }: BoardProps) {
+export default function SoundBoard({ configuration, theme, configMode, setConfigMode, setBoardConfig }: BoardProps) {
 
     const boardState = useBoardState(configuration);
 
@@ -28,7 +29,7 @@ export default function SoundBoard({ configuration, theme, configMode, setConfig
                 (pad: Pad, idx: number) =>
                     theme === "main" ?
                         <SamplePad data={pad} idx={idx} />
-                        : <ConfigPad data={pad} idx={idx} configMode={configMode} setConfigMode={setConfigMode} />
+                        : <ConfigPad data={pad} idx={idx} configMode={configMode} setConfigMode={setConfigMode} setBoardConfig={setBoardConfig} />
             )}
         </div>
     )
@@ -44,7 +45,7 @@ const SamplePad = ({ data, idx }: { data: Pad, idx: number }) => {
     </div>
 }
 
-const ConfigPad = ({ data, idx, configMode, setConfigMode }: { data: Pad, idx: number, configMode: ConfigModeState, setConfigMode: Dispatch<SetStateAction<ConfigModeState>> }) => {
+const ConfigPad = ({ data, idx, configMode, setConfigMode, setBoardConfig }: { data: Pad, idx: number, configMode: ConfigModeState, setConfigMode: Dispatch<SetStateAction<ConfigModeState>>, setBoardConfig: any }) => {
     const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
     const [displayDetails, setDisplayDetails] = useState(false)
 
@@ -60,7 +61,10 @@ const ConfigPad = ({ data, idx, configMode, setConfigMode }: { data: Pad, idx: n
         configMode &&
             configMode.currentSample &&
             data.id &&
-            Invoker.updateConfig({ pad_key: data.id, sample: configMode.currentSample })
+            Invoker.updateConfig({ pad_key: data.id, sample: configMode.currentSample }).then(newConfig => {
+                console.log(newConfig)
+                setBoardConfig(newConfig)
+            })
 
         setConfigMode({ mode: "view", currentSample: undefined })
 

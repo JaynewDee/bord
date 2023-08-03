@@ -9,17 +9,9 @@ use std::{
     path::PathBuf,
 };
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct BoardConfig {
     pub pads: Pads,
-}
-
-impl Default for BoardConfig {
-    fn default() -> Self {
-        Self {
-            pads: Pads::default(),
-        }
-    }
 }
 
 impl From<Vec<Pad>> for BoardConfig {
@@ -105,6 +97,8 @@ impl Default for Pads {
         }
     }
 }
+
+#[derive(Serialize, Deserialize)]
 pub struct PadsIterator {
     pads: Pads,
     current_index: usize,
@@ -177,10 +171,7 @@ pub struct AllSamples {
 
 impl From<Vec<DirEntry>> for AllSamples {
     fn from(entries: Vec<DirEntry>) -> Self {
-        let samps = entries
-            .into_iter()
-            .map(|entry| Sample::from(entry))
-            .collect();
+        let samps = entries.into_iter().map(Sample::from).collect();
 
         Self { list: samps }
     }
@@ -219,7 +210,7 @@ impl AudioDetails for Sample {
         duration.as_secs_f64()
     }
     fn mime_type(p: PathBuf) -> String {
-        let data_type = infer::get_from_path(&p).unwrap();
+        let data_type = infer::get_from_path(p).unwrap();
         data_type.unwrap().mime_type().to_string()
     }
 }
@@ -282,7 +273,7 @@ impl AudioInterface {
         let mut thread_handles = Vec::new();
 
         let sample_handle = std::thread::spawn(move || {
-            AudioManager::new().with_interruption(filepath.clone());
+            AudioManager::new().with_interruption(filepath);
         });
 
         thread_handles.push(sample_handle);
@@ -303,7 +294,6 @@ impl AudioInterface {
 use std::sync::{Arc, Mutex};
 
 struct AudioManager {
-    // Mutex to hold the currently playing audio sample (if any)
     current_sample: Arc<Mutex<Option<PathBuf>>>,
 }
 
@@ -325,10 +315,10 @@ impl AudioManager {
         println!("{:#?}", current_sample_guard);
         let audio_handle = sl.play(&wav);
 
-        if let Some(_) = &*current_sample_guard {
+        if (*current_sample_guard).is_some() {
             sl.stop(audio_handle);
 
-            *current_sample_guard = Some(sample_path.to_owned());
+            *current_sample_guard = Some(sample_path);
         }
 
         while sl.active_voice_count() > 0 {

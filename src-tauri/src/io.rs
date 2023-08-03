@@ -11,7 +11,7 @@ use super::audio::{AllSamples, AudioInterface, BoardConfig, Pads};
 pub struct SampleHandler;
 
 trait PathManager<P: AsRef<Path> + ?Sized> {
-    fn carve(dir: &P) -> ();
+    fn carve(dir: &P);
     fn temp() -> P;
     fn append(source: &mut P, target: &P) -> P;
     fn filename(p: &mut P) -> P;
@@ -116,7 +116,7 @@ impl SampleHandler {
         let mut buffer = Self::sample_buffer(&file);
         file.read_to_end(&mut buffer).unwrap();
 
-        let mut output_file = File::create(&destination).unwrap();
+        let mut output_file = File::create(destination).unwrap();
 
         output_file.write_all(&buffer)?;
 
@@ -156,13 +156,15 @@ impl SampleHandler {
         let new_config = serde_json::to_string(&config).unwrap();
 
         if let Ok(mut created) = file {
+            println!("{:#?}", &new_config);
             created.write_all(new_config.as_bytes())?;
         };
 
         Ok(())
     }
 
-    fn init_board_config() {
+    // Careful!
+    pub fn init_board_config() {
         println!("Initializing config ... ");
         let mut config_path = Self::config_dir();
 
@@ -206,12 +208,17 @@ impl SampleHandler {
 
             config.read_to_string(&mut data).unwrap();
 
-            if let Ok(config) = serde_json::from_str(&data) {
-                println!("{:#?}", &config);
-                config
-            } else {
-                BoardConfig {
-                    pads: Pads::default(),
+            match serde_json::from_str(&data) {
+                Ok(config) => {
+                    println!("{:#?}", &config);
+                    config
+                }
+                Err(_e) => {
+                    // println!("{}", &data);
+                    // println!("{:#?}", e);
+                    BoardConfig {
+                        pads: Pads::default(),
+                    }
                 }
             }
         } else {
@@ -231,7 +238,11 @@ impl SampleHandler {
 
         prev_config.pads.into_iter().for_each(|mut p| {
             if p.id == pad_key {
+                println!("Key match");
                 p.sample = Some(sample.clone());
+                if p.name == *"Unassigned" {
+                    p.name = sample.name.to_owned();
+                }
             }
             new_config.push(p);
         });

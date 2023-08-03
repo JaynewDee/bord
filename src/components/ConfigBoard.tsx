@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { AllSamples, BoardConfig, GenericSetter } from '../ffi/invoke'
+import { AllSamples, BoardConfig, GenericSetter, Invoker } from '../ffi/invoke'
 import { Samples } from './Samples'
 import SoundBoard from './SoundBoard'
 import "./config-board.css"
@@ -24,7 +24,7 @@ interface ConfigProps {
 
 export type Modes = "view" | "edit";
 
-export default function ConfigBoard({ configuration, userSamples, setUserSamples, setConfigMode, configMode }: ConfigProps) {
+export default function ConfigBoard({ configuration, userSamples, setUserSamples, setConfigMode, setBoardConfig, configMode }: ConfigProps) {
     useEffect(() => {
         const handleClickOff = (e: any) => {
             const isValidTarget = Array.from(e.target.classList).includes("config-page")
@@ -39,14 +39,24 @@ export default function ConfigBoard({ configuration, userSamples, setUserSamples
         return () => document.removeEventListener('click', handleClickOff)
     }, [])
 
+    const handleBoardReset = () => {
+        Invoker.resetBoardConfig().then(newConfig =>
+            setBoardConfig(newConfig)
+        )
+    }
     return (
         <article className="config-page">
             <h3 >BOARD CONFIGURATION</h3>
             <section className="board-configuration">
                 {/* Reuse component with unique "theme flag" */}
                 <Samples userSamples={userSamples} setUserSamples={setUserSamples} theme="configure" setConfigMode={setConfigMode} />
-                <SoundBoard configuration={configuration} theme="configure" configMode={configMode} setConfigMode={setConfigMode} />
+                <SoundBoard configuration={configuration} theme="configure" configMode={configMode} setConfigMode={setConfigMode} setBoardConfig={setBoardConfig} />
             </section>
+            <section className="config-tools-section">
+                <button className="reset-pads-btn" onClick={handleBoardReset}>RESET ALL</button>
+
+            </section>
+
         </article>
     )
 }

@@ -32,21 +32,20 @@ function App() {
     setUserSamples
   }
 
-  console.log(boardConfig)
   const sampleManagerPackage = {
     samples: userSamples,
     setUserSamples,
     setConfigMode
   }
 
-  useTitlebar("#329ea3")
+  useTitlebar("#000000")
 
   useNumpadListeners()
   useDataInitializer(setUserSamples, setBoardConfig)
 
   const displaySwitch = (state: string) => {
     const displays: { [key: string]: JSX.Element } = {
-      "board": <SoundBoard configuration={boardConfig} theme="main" configMode={configMode} setConfigMode={setConfigMode} />,
+      "board": <SoundBoard {...configurationPackage} theme="main" />,
       "samples": <SampleManager {...sampleManagerPackage} />,
       "board_config": <ConfigBoard {...configurationPackage} />
     }

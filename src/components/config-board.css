@@ -71,3 +71,13 @@
 .sample-list-configure .sample-duration {
     display: none;
 }
+
+.config-tools-section {
+    display: flex;
+    justify-content: center;
+}
+.reset-pads-btn {
+    
+    padding: 3px 5px;
+    font-size: 80%;
+}

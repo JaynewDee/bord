@@ -7,6 +7,7 @@ enum Command {
     AllSamples = "samples_list",
     BoardConfig = "board_config",
     UpdateConfig = "update_config",
+    ResetBoardConfig = "reset_board_config",
     DeleteSample = "delete_sample",
     PlaySample = "play_sample",
     Ping = "ping"
@@ -44,6 +45,9 @@ export class Invoker {
         return await invoke(Command.UpdateConfig, { message })
     }
 
+    static resetBoardConfig = async (): Promise<BoardConfig> => {
+        return await invoke(Command.ResetBoardConfig)
+    }
     static deleteSample = async (name: string): Promise<AllSamples> => {
         return await invoke(Command.DeleteSample, { name })
     }
