@@ -4,6 +4,7 @@ import { MouseEvent } from "react";
 type TooltipSetter = GenericSetter<{ x: number, y: number }>;
 type DisplaySetter = GenericSetter<boolean>;
 
+// Kind of a bad name .. should refactor to specific role
 export default function useMouseEnterTooltip(tooltipSetter: TooltipSetter, displaySetter: DisplaySetter) {
 
     const handleMouseEnter = (e: MouseEvent<any>) => {

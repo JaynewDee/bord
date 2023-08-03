@@ -3,3 +3,7 @@
     min-width: 30rem;
     max-width: 80rem;
 }
+
+.sample-manager > h3 {
+    margin-left: 5rem;
+}

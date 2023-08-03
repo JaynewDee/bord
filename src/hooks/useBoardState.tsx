@@ -4,7 +4,7 @@ import { DefaultBoardState } from "../data";
 
 export type BoardState = Pad[]
 
-export default function useBoardState(configuration: BoardConfig | undefined) {
+export default function useBoardState(configuration: BoardConfig) {
     const [boardState, setBoardState] = useState<BoardState>(DefaultBoardState)
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function useBoardState(configuration: BoardConfig | undefined) {
 
         for (const pad in pads) {
             // @ts-ignore
-            state.push(pads[pad])
+            state.push({ ...pads[pad], id: pad })
         }
 
         setBoardState(state)

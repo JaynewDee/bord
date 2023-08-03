@@ -1,19 +1,35 @@
-import { useRef, MouseEvent, useState, MutableRefObject } from 'react';
+import { useRef, MouseEvent, useState, MutableRefObject, Dispatch, SetStateAction } from 'react';
 import { AllSamples, GenericSetter, Invoker, SampleItem, SamplesList } from '../ffi/invoke';
 
 import "./samples.css"
 import { emit } from '@tauri-apps/api/event';
+import { Modes } from './ConfigBoard';
+import { ConfigModeState } from '../App';
 
 export type SamplesSetter = GenericSetter<AllSamples>
 
-
 interface SampleProps {
     s: SampleItem,
-    setSamples: SamplesSetter
+    theme: string,
+    setSamples: SamplesSetter,
+    setConfigMode: any
 }
 
-function Sample({ s, setSamples }: SampleProps) {
+const SampleOptions = (theme: string, hoverState: boolean, handleEnterEditMode: any) => {
+    return <div className="sample-list-options">
+        {theme === "configure" ?
+            <button style={hoverState ? { display: "inline-block" } : { display: "none" }} className="sample-hover-add-btn" onClick={handleEnterEditMode}>+</button> : <></>
+        }
+    </div>
+}
+
+function Sample({ s, setSamples, theme, setConfigMode }: SampleProps) {
     const [playState, setPlayState] = useState(false);
+
+    const [hoverState, setHoverState] = useState(false);
+
+    const handleMouseHover = (_: MouseEvent<any>) => setHoverState(true)
+    const handleMouseLeave = (_: MouseEvent<any>) => setHoverState(false)
 
     const sampleRef = useRef(null);
 
@@ -34,13 +50,16 @@ function Sample({ s, setSamples }: SampleProps) {
         playAnimation(sampleRef, setPlayState);
     }
 
+    const handleEnterEditMode = () => setConfigMode({ mode: "edit", currentSample: s })
+
     return (
         <>
             <p className="animate-bar"></p>
-            <div className="sample-list-item" data-play-state={playState} draggable="true">
+            <div className="sample-list-item" data-play-state={playState} draggable="true" onMouseEnter={handleMouseHover} onMouseLeave={handleMouseLeave}>
                 <span className="delete-sample-btn" onClick={handleDelete}>X</span>
                 <p className="sample-name" onClick={handlePlaySample} ref={sampleRef} data-duration={s.duration}>{s.name}</p>
-                <span className="sample-duration"> {formatDuration(s.duration)} </span>
+                <span className="sample-duration"> {formatDuration(s.duration)}</span>
+                {SampleOptions(theme, hoverState, handleEnterEditMode)}
             </div>
         </>
     )
@@ -64,16 +83,20 @@ function playAnimation(ref: MutableRefObject<null>, setIsPlaying: AnimationSette
 interface SamplesProps {
     userSamples: AllSamples;
     setUserSamples: SamplesSetter;
+    setConfigMode: Dispatch<SetStateAction<ConfigModeState>>;
     theme: string
 }
 
-export function Samples({ userSamples, setUserSamples, theme }: SamplesProps) {
+export function Samples({ userSamples, setUserSamples, theme, setConfigMode }: SamplesProps) {
     const list = userSamples?.list || [];
 
     return (
         <div className={`sample-list-${theme}`}>
             {
-                list && list.length ? list.map((s: SampleItem) => <Sample s={s} key={s.name} setSamples={setUserSamples} />) : <></>
+                list && list.length ? list.map((s: SampleItem) =>
+                    <Sample s={s} key={s.name} theme={theme} setSamples={setUserSamples} setConfigMode={setConfigMode} />)
+                    :
+                    <></>
             }
         </div>
     )

@@ -1,16 +1,18 @@
 .config-page {
-    padding: 1rem;
+
 }
 
 .config-page>h3 {
     text-align: center;
+    margin-bottom: 3rem;
 }
 
 .board-configuration {
     display: flex;
-    margin: 5rem 1rem;
+    margin: 3rem 1rem;
 }
 
+/* The counterpart to .soundbar-main in ./sound-board.css */
 .soundboard-configure {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -26,22 +28,43 @@
     margin: auto;
 }
 
+.config-pad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.config-pad[data-config-mode="edit"] {
+    filter: blur(2px)
+}
+
+.config-pad[data-config-mode="edit"]:hover {
+   border: 3px solid rgba(0, 100, 159, .9); 
+   border-radius: 5px;
+   filter: none;
+}
+
 .config-pad-details {
     position: absolute;
 }
 
-.sample-list-configure {
-    justify-content: center;
-    width: 300px; 
+.sample-hover-add-btn {
+    padding: .1rem .3rem;
+    cursor: pointer;
+    background-color: rgba(0, 59, 173, .7);
 }
+
+.sample-list-configure {
+    width: 300px; 
+    margin-top: 1rem;
+    margin-left: 3rem;
+ }
 
 .sample-list-configure>* {
     margin: 0;
 }
 
-.sample-list-configure > .sample-list-item > .sample-name {
-    text-align: center; 
-    margin: auto;
+.sample-list-configure > .sample-list-item {
 }
 
 .sample-list-configure .delete-sample-btn,

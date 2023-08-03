@@ -9,15 +9,18 @@ import { useFileDrop } from '../hooks';
 
 interface ManagerProps {
     samples: AllSamples,
-    setter: SamplesSetter
+    setUserSamples: SamplesSetter,
+    setConfigMode: any
 }
 
-export default function SampleManager({ samples, setter }: ManagerProps) {
-    useFileDrop(setter);
+export default function SampleManager({ samples, setUserSamples, setConfigMode }: ManagerProps) {
+    useFileDrop(setUserSamples);
 
     return (
         <div className="sample-manager">
-            <Samples userSamples={samples} setUserSamples={setter} theme="manager" />
+            <h3>SAMPLE COLLECTION</h3>
+            {/* Reuse component with unique "theme flag" */}
+            <Samples userSamples={samples} setUserSamples={setUserSamples} theme="manager" setConfigMode={setConfigMode} />
         </div>
     )
 }

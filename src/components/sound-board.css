@@ -3,11 +3,11 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     margin: auto;
-    height: 400px;
-    width: 400px;
+    margin-top: 0;
+    height: 350px;
+    width: 350px;
     padding: 3rem;
 }
-
 
 .soundboard-main>div {
     display: flex;

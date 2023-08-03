@@ -12,6 +12,11 @@ enum Command {
     Ping = "ping"
 }
 
+type UpdateConfigMessage = {
+    pad_key: string,
+    sample: SampleItem
+}
+
 export class Invoker {
     static initialize = async (): Promise<[AllSamples, BoardConfig]> => {
         const samples = await this.samplesList();
@@ -34,9 +39,9 @@ export class Invoker {
     static boardConfig = async (): Promise<BoardConfig> => {
         return await invoke(Command.BoardConfig)
     }
-
-    static updateConfig = async (padKey: string, sample: SampleItem): Promise<BoardConfig> => {
-        return await invoke(Command.UpdateConfig, { padKey, sample })
+    // padKey: "a_1" | "a_2".."b_1" | "c_3" etc
+    static updateConfig = async (message: UpdateConfigMessage): Promise<BoardConfig> => {
+        return await invoke(Command.UpdateConfig, { message })
     }
 
     static deleteSample = async (name: string): Promise<AllSamples> => {
@@ -74,6 +79,7 @@ export type BoardConfig = {
 }
 
 export type Pad = {
+    id: string,
     name: string,
     sample: SampleItem
 }

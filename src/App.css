@@ -3,4 +3,5 @@
   flex-flow: column nowrap;
   margin: 0;
   padding-top: 1.9rem;
+  min-height: 100vh;
 }

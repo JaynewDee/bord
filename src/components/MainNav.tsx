@@ -1,7 +1,7 @@
 import "./main-nav.css";
 import { Invoker, GenericSetter } from '../ffi/invoke';
 
-type DisplaySetter = GenericSetter<string>;
+type DisplaySetter = GenericSetter<string>
 
 export default function MainNav(setDisplay: DisplaySetter) {
 
