@@ -27,6 +27,8 @@ function App() {
 
   ///////
 
+  console.log(state.configMode.mode)
+
   useTitlebar("#121212");
 
   useDataInitializer(dispatch);

@@ -13,11 +13,16 @@ export default function SampleManager({
 }: PageProps) {
   useFileDrop(stateDispatcher);
 
+  console.log(appState.configMode.mode);
   return (
     <div className="sample-manager">
       <h3>SAMPLE COLLECTION</h3>
       {/* Reuse component with unique "theme flag" */}
-      <Samples appState={appState} stateDispatcher={stateDispatcher} theme="" />
+      <Samples
+        appState={appState}
+        stateDispatcher={stateDispatcher}
+        theme="manager"
+      />
     </div>
   );
 }

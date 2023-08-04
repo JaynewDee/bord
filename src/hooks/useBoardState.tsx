@@ -10,7 +10,7 @@ export default function useBoardState(configuration: BoardConfig) {
   useEffect(() => {
     if (!configuration) return;
 
-    let state = [];
+    let state: Pad[] = [];
 
     const { pads } = configuration;
 

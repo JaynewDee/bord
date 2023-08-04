@@ -21,11 +21,15 @@ const SampleOptions = (
   handleEnterEditMode?: any,
   handleEnterEditNameMode?: any,
 ) => {
+  const hoverStyles = hoverState
+    ? { display: "inline-block" }
+    : { display: "none" };
+
   return (
     <div className="sample-list-options">
       {theme === "configure" ? (
         <button
-          style={hoverState ? { display: "inline-block" } : { display: "none" }}
+          style={hoverStyles}
           className="sample-hover-add-btn"
           onClick={handleEnterEditMode}
         >
@@ -33,7 +37,7 @@ const SampleOptions = (
         </button>
       ) : theme === "manager" ? (
         <button
-          style={hoverState ? { display: "inline-block" } : { display: "none" }}
+          style={hoverStyles}
           className="sample-hover-edit-name-btn"
           onClick={handleEnterEditNameMode}
         >
@@ -74,11 +78,10 @@ function Sample({ s, theme, configMode, stateDispatcher }: SampleProps) {
   };
 
   const handlePlaySample = () => {
-    const current = sampleRef.current as HTMLElement | null;
-
-    console.log(current?.textContent);
-
-    current && current.textContent && emit("play_sample", current.textContent);
+    const current = sampleRef.current as HTMLElement | null;  
+    const sampleAvailable = current && s.filename;
+    
+    sampleAvailable && emit("play_sample", s.filename);
 
     playAnimation(sampleRef, setPlayState);
   };
@@ -88,6 +91,7 @@ function Sample({ s, theme, configMode, stateDispatcher }: SampleProps) {
       type: ACTION.UPDATE_CONFIG_MODE,
       payload: { mode: "edit", currentSample: s },
     });
+
   const handleEnterEditNameMode = () =>
     stateDispatcher({
       type: ACTION.UPDATE_CONFIG_MODE,
@@ -137,7 +141,9 @@ function playAnimation(
   ref: MutableRefObject<null>,
   setIsPlaying: AnimationSetter,
 ) {
+
   setIsPlaying(true);
+
   const el = ref.current as any;
   const duration = parseFloat(el.getAttribute("data-duration"));
 

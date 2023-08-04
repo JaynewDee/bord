@@ -12,12 +12,8 @@ const validCodes = [
   "Numpad9",
 ];
 
-// TODO
-// Implement debouncer to fix multifire!
-// Finally found a meaningful reason to implement debouncing =)
-
 export function useNumpadListeners(this: any) {
-  const debounce = (context: any, func: any, delay: number) => {
+  const debounce = (context: ThisType<any>, func: any, delay: number) => {
     let debounceTimeout: any = null;
 
     return (...args: any) => {
@@ -38,7 +34,10 @@ export function useNumpadListeners(this: any) {
   const keyEventDebouncer = debounce(this, handleKeyEvents, 300);
 
   useEffect(() => {
+
     document.addEventListener("keydown", keyEventDebouncer);
+
     return () => document.removeEventListener("keydown", keyEventDebouncer);
   }, []);
+
 }
