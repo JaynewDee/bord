@@ -7,6 +7,8 @@ export default async function useFileDrop(
   stateDispatcher: Dispatch<ActionUnion>,
 ) {
   const handleDropEvent = async (e: DropEvent) => {
+    console.log(e.payload)
+
     const transferEntity: AudioFileUploadMessage = {
       id: e.id,
       path: e.payload[0],

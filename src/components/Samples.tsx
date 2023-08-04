@@ -98,6 +98,7 @@ function Sample({ s, theme, configMode, stateDispatcher }: SampleProps) {
       payload: { mode: "edit_name", currentSample: s },
     });
 
+    console.log(configMode)
   return (
     <>
       <p className="animate-bar"></p>

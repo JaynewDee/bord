@@ -5,7 +5,9 @@
 }
 
 .sample-manager > h3 {
-  margin-left: 5rem;
+  text-align:center;
+  margin-bottom: .2rem;
+  margin-top: 0;
 }
 
 .sample-hover-edit-name-btn {
@@ -14,4 +16,10 @@
   padding: 3px 8px;
   right: 33%;
   cursor: pointer;
+}
+
+.get-started {
+  width: 20%;
+margin: 5rem auto;
+text-align:center;
 }
