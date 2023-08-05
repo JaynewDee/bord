@@ -5,8 +5,8 @@
 }
 
 .sample-manager > h3 {
-  text-align:center;
-  margin-bottom: .2rem;
+  text-align: center;
+  margin-bottom: 0.2rem;
   margin-top: 0;
 }
 
@@ -20,6 +20,6 @@
 
 .get-started {
   width: 20%;
-margin: 5rem auto;
-text-align:center;
+  margin: 5rem auto;
+  text-align: center;
 }

@@ -7,20 +7,22 @@ export default async function useFileDrop(
   stateDispatcher: Dispatch<ActionUnion>,
 ) {
   const handleDropEvent = async (e: DropEvent) => {
-    console.log(e.payload)
+    const { payload, id } = e;
 
-    const transferEntity: AudioFileUploadMessage = {
-      id: e.id,
-      path: e.payload[0],
-    };
+    if (payload.length < 1) return;
 
-    const saveSuccess = await Invoker.uploadSample(transferEntity);
+    for (let i = 0; i < payload.length; i++) {
+      const transferEntity: AudioFileUploadMessage = {
+        id: id,
+        path: payload[i],
+      };
 
-    if (saveSuccess) {
-      Invoker.samplesList().then((samples) =>
-        stateDispatcher({ type: ACTION.UPDATE_SAMPLES, payload: samples }),
-      );
+      await Invoker.uploadSample(transferEntity);
     }
+
+    Invoker.samplesList().then((samples) =>
+      stateDispatcher({ type: ACTION.UPDATE_SAMPLES, payload: samples }),
+    );
   };
 
   listen("tauri://file-drop", handleDropEvent);

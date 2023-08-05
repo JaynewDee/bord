@@ -34,10 +34,8 @@ export function useNumpadListeners(this: any) {
   const keyEventDebouncer = debounce(this, handleKeyEvents, 300);
 
   useEffect(() => {
-
     document.addEventListener("keydown", keyEventDebouncer);
 
     return () => document.removeEventListener("keydown", keyEventDebouncer);
   }, []);
-
 }

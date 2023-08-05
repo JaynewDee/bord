@@ -9,6 +9,13 @@ use std::{
     path::PathBuf,
 };
 
+// Send appropriate message when the sample is on a board but,
+//      for whatever reason,
+//      it no longer exists
+// However, for the most part, we don't want this to ever happen.
+//      Find opportunities within other transactions to check for consistency
+//          between front and backend state
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct BoardConfig {
     pub pads: Pads,

@@ -6,6 +6,7 @@
 .sample-list-item {
   display: flex;
   justify-content: space-between;
+  margin: 0.2rem auto;
 }
 
 .sample-list-item[data-play-state="true"] {

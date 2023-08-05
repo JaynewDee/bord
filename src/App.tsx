@@ -6,10 +6,10 @@ import { BoardConfig, AllSamples, SampleItem } from "./ffi/invoke";
 import ConfigBoard, { Modes } from "./components/ConfigBoard";
 import { useTitlebar } from "./hooks";
 import useDataInitializer from "./hooks/useDataInitializer";
-import { ActionUnion, Display, useStateReducer } from "./hooks/useStateReducer";
+import { ActionUnion, Display, useAppStateReducer } from "./hooks/useStateReducer";
 import { Dispatch } from "react";
 
-export interface AppReducerState {
+export interface AppState {
   userSamples: AllSamples;
   displayState: Display;
   boardConfig: BoardConfig;
@@ -22,13 +22,11 @@ export type ConfigModeState = {
 };
 
 function App() {
-  const [state, dispatch]: [AppReducerState, Dispatch<ActionUnion>] =
-    useStateReducer();
+  const [state, dispatch]: [AppState, Dispatch<ActionUnion>] =
+    useAppStateReducer();
 
   ///////
-
-  console.log(state.configMode.mode)
-
+ 
   useTitlebar("#121212");
 
   useDataInitializer(dispatch);

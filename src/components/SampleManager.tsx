@@ -13,11 +13,16 @@ export default function SampleManager({
 }: PageProps) {
   useFileDrop(stateDispatcher);
 
-  console.log(appState.configMode.mode);
-  return (
+   return (
     <div className="sample-manager">
       <h3>SAMPLE COLLECTION</h3>
-      {!appState.userSamples.list.length ? <p className="get-started">Start dropping mp3 files into the window here to get started!</p> : <></>} 
+      {!appState.userSamples.list.length ? (
+        <p className="get-started">
+          Start dropping mp3 files into the window here to get started!
+        </p>
+      ) : (
+        <></>
+      )}
       <Samples
         appState={appState}
         stateDispatcher={stateDispatcher}

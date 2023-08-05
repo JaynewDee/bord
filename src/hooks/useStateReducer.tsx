@@ -1,5 +1,5 @@
 import { useReducer } from "react";
-import { ConfigModeState, AppReducerState } from "../App";
+import { ConfigModeState, AppState } from "../App";
 import { AllSamples, BoardConfig } from "../ffi/invoke";
 import { AllSamplesDefault, DefaultBoardConfig } from "../data";
 
@@ -38,7 +38,7 @@ export type ActionUnion =
   | UpdateBoardConfig
   | UpdateConfigMode;
 
-function stateReducer(state: AppReducerState, { type, payload }: ActionUnion) {
+function stateReducer(state: AppState, { type, payload }: ActionUnion) {
   switch (type) {
     case ACTION.UPDATE_SAMPLES:
       return {
@@ -63,7 +63,7 @@ function stateReducer(state: AppReducerState, { type, payload }: ActionUnion) {
   }
 }
 
-const defaultState: AppReducerState = {
+const defaultState: AppState = {
   userSamples: AllSamplesDefault,
   displayState: "board",
   boardConfig: DefaultBoardConfig,
@@ -83,4 +83,4 @@ export type PageProps = {
   theme?: string;
 };
 
-export const useStateReducer = () => useReducer(stateReducer, defaultState);
+export const useAppStateReducer = () => useReducer(stateReducer, defaultState);

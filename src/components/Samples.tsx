@@ -78,9 +78,9 @@ function Sample({ s, theme, configMode, stateDispatcher }: SampleProps) {
   };
 
   const handlePlaySample = () => {
-    const current = sampleRef.current as HTMLElement | null;  
+    const current = sampleRef.current as HTMLElement | null;
     const sampleAvailable = current && s.filename;
-    
+
     sampleAvailable && emit("play_sample", s.filename);
 
     playAnimation(sampleRef, setPlayState);
@@ -98,7 +98,6 @@ function Sample({ s, theme, configMode, stateDispatcher }: SampleProps) {
       payload: { mode: "edit_name", currentSample: s },
     });
 
-    console.log(configMode)
   return (
     <>
       <p className="animate-bar"></p>
@@ -142,7 +141,6 @@ function playAnimation(
   ref: MutableRefObject<null>,
   setIsPlaying: AnimationSetter,
 ) {
-
   setIsPlaying(true);
 
   const el = ref.current as any;
