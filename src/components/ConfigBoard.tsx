@@ -45,7 +45,7 @@ export default function ConfigBoard({ appState, stateDispatcher }: PageProps) {
   const { configMode, userSamples } = appState;
 
   return (
-    <article className="config-page">
+    <article className="config-page" style={{backdropFilter: "blur(3px)"}}>
       <h3>BOARD CONFIGURATION</h3>
       <h5 className="mode-header">
         Mode:{" "}

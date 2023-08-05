@@ -7,7 +7,6 @@
   font-weight: 400;
 
   color: #0f0f0f;
-  background-color: #f6f6f6;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,6 +18,10 @@
 
 body {
   margin: 0;
+  background: url(./retro-computer.jpg);
+    background-size:     cover; 
+    background-repeat:   no-repeat;
+    background-position: center center; 
 }
 
 input,
@@ -47,6 +50,6 @@ button {
   input,
   button {
     color: #ffffff;
-    background-color: #0f0f0f98;
+    background-color: #0f0f0f;
   }
 }

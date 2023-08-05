@@ -14,7 +14,7 @@ export default function SampleManager({
   useFileDrop(stateDispatcher);
 
    return (
-    <div className="sample-manager">
+    <div className="sample-manager" style={{backdropFilter: "blur(3px)"}}>
       <h3>SAMPLE COLLECTION</h3>
       {!appState.userSamples.list.length ? (
         <p className="get-started">

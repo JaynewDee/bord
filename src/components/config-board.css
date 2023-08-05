@@ -10,6 +10,7 @@
 .board-configuration {
   display: flex;
   margin: 2rem 1rem 0rem;
+  height: 335px;
  }
 
 /* The counterpart to .soundbar-main in ./sound-board.css */
@@ -83,6 +84,7 @@
   margin-left: 3rem;
   overflow-y: scroll;
   direction: rtl;
+  height:
 }
 
 .sample-list-configure::-webkit-scrollbar {
