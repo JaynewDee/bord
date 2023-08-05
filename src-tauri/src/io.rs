@@ -156,7 +156,6 @@ impl SampleHandler {
         let new_config = serde_json::to_string(&config).unwrap();
 
         if let Ok(mut created) = file {
-            println!("{:#?}", &new_config);
             created.write_all(new_config.as_bytes())?;
         };
 
@@ -210,17 +209,10 @@ impl SampleHandler {
             config.read_to_string(&mut data).unwrap();
 
             match serde_json::from_str(&data) {
-                Ok(config) => {
-                    println!("{:#?}", &config);
-                    config
-                }
-                Err(_e) => {
-                    // println!("{}", &data);
-                    // println!("{:#?}", e);
-                    BoardConfig {
-                        pads: Pads::default(),
-                    }
-                }
+                Ok(config) => config,
+                Err(_e) => BoardConfig {
+                    pads: Pads::default(),
+                },
             }
         } else {
             BoardConfig {
@@ -239,7 +231,6 @@ impl SampleHandler {
 
         prev_config.pads.into_iter().for_each(|mut p| {
             if p.id == pad_key {
-                println!("Key match");
                 p.sample = Some(sample.clone());
                 p.name = sample.name.to_owned();
             }

@@ -84,7 +84,7 @@
   margin-left: 3rem;
   overflow-y: scroll;
   direction: rtl;
-  height:
+box-shadow: inset 0px 6px 8px 1px black;
 }
 
 .sample-list-configure::-webkit-scrollbar {
