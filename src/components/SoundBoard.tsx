@@ -46,7 +46,7 @@ const SamplePad = ({ data, idx }: { data: Pad; idx: number }) => {
 
   return (
     <div className="sample-pad" key={idx}>
-      <button
+      <button id={data.id}
         style={data.sample ? { border: "2px solid green" } : {}}
         onClick={handlePadClick}
       ></button>

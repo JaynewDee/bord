@@ -28,10 +28,11 @@ export function useNumpadListeners(this: any) {
     }
 
     if (validCodes.includes(ev.code)) {
+      // handle specific numkey 
     }
   };
 
-  const keyEventDebouncer = debounce(this, handleKeyEvents, 300);
+  const keyEventDebouncer = debounce(this, handleKeyEvents, 100);
 
   useEffect(() => {
     document.addEventListener("keydown", keyEventDebouncer);

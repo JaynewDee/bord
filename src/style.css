@@ -14,14 +14,17 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   overflow: hidden;
+  position: absolute;
 }
 
 body {
   margin: 0;
   background: url(./retro-computer.jpg);
-    background-size:     cover; 
-    background-repeat:   no-repeat;
-    background-position: center center; 
+  background-size:     cover; 
+  background-repeat:   no-repeat;
+  background-position: center center; 
+  position: absolute;
+  z-index: -3;
 }
 
 input,

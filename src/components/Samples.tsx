@@ -4,15 +4,14 @@ import {
   useState,
   MutableRefObject,
   Dispatch,
-  SetStateAction,
 } from "react";
-import { AllSamples, GenericSetter, Invoker, SampleItem } from "../ffi/invoke";
+import { GenericSetter, Invoker, SampleItem } from "../ffi/invoke";
 
 import "./samples.css";
 import { emit } from "@tauri-apps/api/event";
 import { ImPencil2 as Pencil } from "react-icons/im";
 import { AiOutlinePlusSquare as Plus } from "react-icons/ai";
-import { AppReducerState, ConfigModeState } from "../App";
+import { ConfigModeState } from "../App";
 import { ACTION, ActionUnion, StateDispatch } from "../hooks/useStateReducer";
 
 const SampleOptions = (
@@ -155,7 +154,7 @@ function playAnimation(
 }
 
 interface SamplesProps {
-  appState: AppReducerState;
+  appState: any;
   theme: string;
   stateDispatcher: Dispatch<ActionUnion>;
 }

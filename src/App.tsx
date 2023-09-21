@@ -28,7 +28,7 @@ function App() {
   ///////
  
   // Can later accept dynamic theme
-  useTitlebar("#121212");
+  useTitlebar("#111111");
 
   useDataInitializer(dispatch);
 

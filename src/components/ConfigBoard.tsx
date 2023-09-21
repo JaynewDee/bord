@@ -42,7 +42,7 @@ export default function ConfigBoard({ appState, stateDispatcher }: PageProps) {
     });
   };
 
-  const { configMode, userSamples } = appState;
+  const { configMode } = appState;
 
   return (
     <article className="config-page" style={{backdropFilter: "blur(3px)"}}>
@@ -68,20 +68,12 @@ export default function ConfigBoard({ appState, stateDispatcher }: PageProps) {
           stateDispatcher={stateDispatcher}
         />
         <SoundBoard
+          theme="configure"
           appState={appState}
           stateDispatcher={stateDispatcher}
-          theme="configure"
         />
       </section>
       <section className="config-tools-section">
-        <button className="reset-pads-btn" onClick={handleBoardReset}>
-          RESET ALL
-        </button>
-
-        <button className="reset-pads-btn" onClick={handleBoardReset}>
-          RESET ALL
-        </button>
-
         <button className="reset-pads-btn" onClick={handleBoardReset}>
           RESET ALL
         </button>

@@ -1,5 +1,5 @@
 import "./main-nav.css";
-import { Invoker, GenericSetter } from "../ffi/invoke";
+import { Invoker } from "../ffi/invoke";
 import { ACTION, Display, StateDispatch } from "../hooks/useStateReducer";
 
 export default function MainNav(dispatch: StateDispatch) {

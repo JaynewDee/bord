@@ -83,4 +83,5 @@ export type PageProps = {
   theme?: string;
 };
 
+function DispatchHandler(dispatcher: StateDispatch, ) {}
 export const useAppStateReducer = () => useReducer(stateReducer, defaultState);
